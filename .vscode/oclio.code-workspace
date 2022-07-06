@@ -1,0 +1,60 @@
+{
+	"folders": [
+		{
+			"name": "✨ oclio",
+			"path": "..\\"
+		},
+		{
+			"name": "🚀 @oclio/api",
+			"path": "..\\api"
+		},
+		{
+			"name": "🚀 @oclio/app",
+			"path": "..\\app"
+		}
+	],
+	"settings": {
+		"eslint.validate": [
+			"typescript",
+			"typescriptreact"
+		],
+		"editor.formatOnSave": true,
+		"[typescript]": {
+			"editor.defaultFormatter": "esbenp.prettier-vscode"
+		},
+		"[typescriptreact]": {
+			"editor.defaultFormatter": "esbenp.prettier-vscode"
+		},
+		"prettier.configPath": "../.prettierrc",
+		"jest.autoRun": "off",
+		"files.exclude": {
+			"node_modules": true,
+			"app": true,
+			"api": true,
+			"**/*.module.css.d.ts": true
+		},
+		"cSpell.words": [
+			"nestjs",
+			"noslash",
+			"oclio"
+		]
+	},
+	"extensions": {
+		"recommendations": [
+			"folke.vscode-monorepo-workspace",
+			"dbaeumer.vscode-eslint",
+			"streetsidesoftware.code-spell-checker",
+			"gruntfuggly.todo-tree",
+			"wayou.vscode-todo-highlight",
+			"cssho.vscode-svgviewer",
+			"esbenp.prettier-vscode",
+			"orta.vscode-jest",
+			"editorconfig.editorconfig",
+			"oouo-diogo-perdigao.docthis",
+			"markis.code-coverage",
+			"ryanluker.vscode-coverage-gutters",
+			"dotjoshjohnson.xml",
+			"redhat.vscode-yaml"
+		]
+	}
+}

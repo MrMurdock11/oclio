@@ -1,0 +1,18 @@
+{
+	"compilerOptions": {
+		"jsx": "react",
+		"target": "ES5",
+		"module": "commonjs",
+		"removeComments": true,
+		"esModuleInterop": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"outDir": "./dist",
+		"baseUrl": "./src",
+		"paths": {
+			"@components/*": [
+				"components/*"
+			]
+		}
+	}
+}

@@ -1,0 +1,28 @@
+{
+	"name": "oclio",
+	"version": "1.0.0",
+	"description": "Goose bay for every writer",
+	"main": "index.js",
+	"scripts": {
+		"start": "concurrently \"npm start -w=app\" \"npm start -w=api\"",
+		"start:dev": "npm run start:dev -w=api"
+	},
+	"workspaces": [
+		"app",
+		"api"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/MrMurdock11/oclio.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/MrMurdock11/oclio/issues"
+	},
+	"homepage": "https://github.com/MrMurdock11/oclio#readme",
+	"devDependencies": {
+		"concurrently": "7.2.2"
+	}
+}
