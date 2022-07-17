@@ -12,5 +12,15 @@
 		".+(|.module).css$",
 		"^[./]"
 	],
-	"importOrderSeparation": true
+	"importOrderSeparation": true,
+	"overrides": [{
+		"files": "*.yml",
+		"options": {
+			"trailingComma": "es5",
+			"useTabs": false,
+			"tabWidth": 2,
+			"semi": false,
+			"singleQuote": true
+		}
+	}]
 }
