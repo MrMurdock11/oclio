@@ -34,9 +34,12 @@
 			"**/*.module.css.d.ts": true
 		},
 		"cSpell.words": [
+			"firstname",
+			"lastname",
 			"nestjs",
 			"noslash",
-			"oclio"
+			"oclio",
+			"typeorm"
 		]
 	},
 	"extensions": {

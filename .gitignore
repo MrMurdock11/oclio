@@ -16,5 +16,4 @@ logs
 /coverage
 
 # Postgres
-/pgadmin
-/pgdata
+/.data
