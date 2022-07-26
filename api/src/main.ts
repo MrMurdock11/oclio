@@ -1,4 +1,5 @@
 import { NestFactory } from "@nestjs/core";
+import cookieParser from "cookie-parser";
 
 import { AppModule } from "./app.module";
 
@@ -9,7 +10,7 @@ async function bootstrap() {
 			credentials: true,
 		},
 	});
-	app;
+	app.use(cookieParser());
 	await app.listen(3000, () => {
 		console.log("http://localhost:3000/");
 	});

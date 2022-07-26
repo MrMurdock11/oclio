@@ -34,6 +34,8 @@
 			"**/*.module.css.d.ts": true
 		},
 		"cSpell.words": [
+			"automapper",
+			"dtos",
 			"firstname",
 			"lastname",
 			"nestjs",
@@ -41,6 +43,26 @@
 			"oclio",
 			"typeorm"
 		]
+	},
+	"launch": {
+		"configurations": [
+			{
+				"type": "node",
+				"request": "launch",
+				"name": "Debug Nest Framework",
+				"args": [
+					"${workspaceFolder}/api/src/main.ts"
+				],
+				"runtimeArgs": [
+					"--nolazy",
+					"-r",
+					"ts-node/register",
+				],
+				"sourceMaps": true,
+				"cwd": "${workspaceFolder}/api",
+				"protocol": "inspector"
+			},
+		],
 	},
 	"extensions": {
 		"recommendations": [
