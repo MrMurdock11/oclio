@@ -4,9 +4,9 @@ import Joi from "@hapi/joi";
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 
-import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
 import { DatabaseModule } from "./database/database.module";
+import { ProductsModule } from "./products/products.module";
 import { UsersModule } from "./users/users.module";
 
 @Module({
@@ -30,7 +30,7 @@ import { UsersModule } from "./users/users.module";
 		DatabaseModule,
 		UsersModule,
 		AuthModule,
+		ProductsModule,
 	],
-	providers: [AppService],
 })
 export class AppModule {}

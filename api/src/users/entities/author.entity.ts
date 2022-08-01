@@ -1,14 +1,14 @@
 import { AutoMap } from "@automapper/classes";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({ name: "users" })
-export class UserEntity {
+@Entity("users")
+export class AuthorEntity {
 	@AutoMap()
 	@PrimaryGeneratedColumn()
-	id: number;
+	id?: number;
 
 	@AutoMap()
-	@Column("varchar", { name: "username", nullable: false })
+	@Column("varchar")
 	username: string;
 
 	@AutoMap()
@@ -18,12 +18,4 @@ export class UserEntity {
 	@AutoMap()
 	@Column("varchar", { name: "firstname" })
 	firstName: string | null;
-
-	@AutoMap()
-	@Column("varchar", { nullable: false })
-	email: string;
-
-	@AutoMap()
-	@Column("varchar", { nullable: false })
-	password: string;
 }

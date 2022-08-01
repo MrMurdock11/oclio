@@ -4,8 +4,8 @@ import { Inject, Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
 import { RegisterRequestDto } from "../auth/dtos/register-request.dto";
-import { User } from "../models/user";
-import { UserEntity } from "./user.entity";
+import { User } from "../core/models";
+import { UserEntity } from "./entities/user.entity";
 
 @Injectable()
 export class UserProfile extends AutomapperProfile {

@@ -26,3 +26,21 @@ VALUES (
 		'admin@oclio.com',
 		'1'
 	);
+-- Table: Products
+CREATE TABLE public.products (
+	id integer NOT NULL DEFAULT nextval('products_id_seq'::regclass),
+	title character varying COLLATE pg_catalog."default" NOT NULL,
+	content character varying COLLATE pg_catalog."default" NOT NULL,
+	type_id integer NOT NULL DEFAULT nextval('products_type_id_seq'::regclass),
+	created_date date,
+	author_id integer NOT NULL DEFAULT nextval('products_author_id_seq'::regclass),
+	CONSTRAINT products_pkey PRIMARY KEY (id),
+	CONSTRAINT products_author_id_fkey FOREIGN KEY (author_id) REFERENCES public.users (id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION NOT VALID,
+	CONSTRAINT products_type_id_fkey FOREIGN KEY (type_id) REFERENCES public.product_types (id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION NOT VALID
+);
+-- Table: Product types
+CREATE TABLE public.product_types (
+	id integer NOT NULL DEFAULT nextval('product_types_id_seq'::regclass),
+	title character varying(70) COLLATE pg_catalog."default" NOT NULL,
+	CONSTRAINT product_types_pkey PRIMARY KEY (id)
+);

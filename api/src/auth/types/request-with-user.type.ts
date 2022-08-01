@@ -1,6 +1,6 @@
 import { Request } from "express";
 
-import { User } from "../../models/user";
+import { User } from "../../core/models";
 
 export type RequestWithUser = {
 	user: User;

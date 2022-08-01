@@ -12,8 +12,8 @@ import {
 } from "@nestjs/common";
 import { Response } from "express";
 
+import { User } from "../core/models/user";
 import { PostgresErrorCode } from "../database/postgres-error-codes";
-import { User } from "../models/user";
 import { AuthService } from "./auth.service";
 import { RegisterRequestDto } from "./dtos/register-request.dto";
 import { JwtAuthGuard } from "./guards/jwt-authentication.guard";
