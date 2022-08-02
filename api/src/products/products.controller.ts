@@ -17,8 +17,10 @@ import {
 import { JwtAuthGuard } from "../auth/guards/jwt-authentication.guard";
 import { RequestWithUser } from "../auth/types/request-with-user.type";
 import { Product } from "../core/models";
-import { PostgresErrorCode } from "../database/postgres-error-codes";
 import { CreateProductDto } from "./dtos/create-product.dto";
+import { ResponseGetAllDto } from "./dtos/response-get-all.dto";
+import { ResponseGetByIdDto } from "./dtos/response-get-by-id.dto";
+import { UpdateProductDto } from "./dtos/update-product.dto";
 import { ProductsService } from "./products.service";
 
 @Controller("api/products")
@@ -31,13 +33,41 @@ export class ProductsController {
 	) {}
 
 	@Get()
-	getAll() {
-		return [];
+	async getAll(): Promise<ResponseGetAllDto> {
+		try {
+			const products = await this.productsService.getAll();
+
+			return new ResponseGetAllDto(products);
+		} catch (error) {
+			if (error instanceof HttpException) {
+				throw error;
+			}
+
+			if (error instanceof Error) {
+				throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+			}
+
+			throw error;
+		}
 	}
 
 	@Get(":id")
-	getById(@Param("id") id: number) {
-		return id;
+	async getById(@Param("id") id: number): Promise<ResponseGetByIdDto> {
+		try {
+			const product = await this.productsService.getById(id);
+
+			return new ResponseGetByIdDto(product);
+		} catch (error) {
+			if (error instanceof HttpException) {
+				throw error;
+			}
+
+			if (error instanceof Error) {
+				throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+			}
+
+			throw error;
+		}
 	}
 
 	@Post()
@@ -51,13 +81,6 @@ export class ProductsController {
 
 			await this.productsService.create(product, user.id);
 		} catch (error) {
-			if (error?.code === PostgresErrorCode.UniqueViolation) {
-				throw new HttpException(
-					"User with that email already exists",
-					HttpStatus.BAD_REQUEST
-				);
-			}
-
 			if (error instanceof HttpException) {
 				throw error;
 			}
@@ -69,12 +92,32 @@ export class ProductsController {
 	}
 
 	@Put(":id")
-	update(@Param("id") id: number) {
-		return id;
+	async update(@Param("id") id: number, @Body() dto: UpdateProductDto) {
+		try {
+			await this.productsService.update(id, dto);
+		} catch (error) {
+			if (error instanceof HttpException) {
+				throw error;
+			}
+
+			if (error instanceof Error) {
+				throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+			}
+		}
 	}
 
 	@Delete(":id")
-	delete(@Param("id") id: number) {
-		return id;
+	async delete(@Param("id") id: number) {
+		try {
+			await this.productsService.delete(id);
+		} catch (error) {
+			if (error instanceof HttpException) {
+				throw error;
+			}
+
+			if (error instanceof Error) {
+				throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+			}
+		}
 	}
 }
