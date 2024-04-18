@@ -13,6 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
           return request?.cookies?.Authentication;
         },
       ]),
+      passReqToCallback: true,
       ignoreExpiration: false,
       secretOrKey: process.env.TOKEN_KEY,
     });

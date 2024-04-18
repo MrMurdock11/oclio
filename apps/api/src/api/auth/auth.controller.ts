@@ -1,4 +1,11 @@
-import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpStatus,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { RegisterUserCommand } from 'src/application/users/commands/register/register-user.command';
 import { SignUpDto } from './sign-up.dto';
@@ -7,6 +14,7 @@ import { RegisterUserResult } from 'src/application/users/commands/register/regi
 import { SignInDto } from './sign-in.dto';
 import { AuthenticateQuery } from 'src/application/users/queries/authenticate/authenticate.command';
 import { AuthenticateResult } from 'src/application/users/queries/authenticate/authenticate.result';
+import { AccessTokenGuard } from '../guards/access-token.guard';
 
 @Controller({
   path: 'auth',
@@ -54,5 +62,20 @@ export class AuthController {
       })
       .status(HttpStatus.NO_CONTENT)
       .send();
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Post('logout')
+  async logout(@Res() res: Response) {
+    // Set the cookie's expiration date to a past time to invalidate it
+    res
+      .cookie('Authentication', '', {
+        httpOnly: true,
+        expires: new Date(0),
+      })
+      .status(HttpStatus.OK)
+      .json({
+        message: 'Logout successful',
+      });
   }
 }

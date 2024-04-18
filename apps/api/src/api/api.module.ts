@@ -5,10 +5,11 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { AuthController } from './auth/auth.controller';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { AccessTokenGuard } from './guards/access-token.guard';
 
 @Module({
   imports: [ApplicationModule, CqrsModule, PassportModule],
   controllers: [UsersController, AuthController],
-  providers: [JwtStrategy],
+  providers: [JwtStrategy, AccessTokenGuard],
 })
 export class ApiModule {}
