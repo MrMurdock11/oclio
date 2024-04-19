@@ -2,14 +2,13 @@ import { Injectable } from '@nestjs/common';
 
 import { Prisma, User } from '@prisma/client';
 
-import { UsersRepository } from '../../core/user-aggregate/user.repository';
 import { PrismaService } from '../../persistence/prisma/prisma.service';
 
 @Injectable()
-export class UsersService implements UsersRepository {
+export class UsersService {
   constructor(private prismaService: PrismaService) {}
 
-  async findOneById(id: number): Promise<User | null> {
+  async findOneById(id: bigint): Promise<User | null> {
     return this.prismaService.user.findUnique({
       where: { id },
     });

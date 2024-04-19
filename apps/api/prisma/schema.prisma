@@ -19,7 +19,7 @@ model User {
   bio            String?
   email          String       @unique @db.VarChar(256)
   hashedPassword String       @db.VarChar(72)
-  photos         Photo[]
+  photo          Photo?
   socialLinks    SocialLink[]
 
   @@map("users")
@@ -28,7 +28,7 @@ model User {
 model Photo {
   id     BigInt  @id @default(autoincrement())
   base64 String?
-  userId BigInt
+  userId BigInt  @unique
   user   User    @relation(fields: [userId], references: [id])
 
   @@map("photos")
