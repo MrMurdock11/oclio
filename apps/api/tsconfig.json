@@ -16,6 +16,20 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "paths": {
+      "$presentation/*": [
+        "src/presentation/*"
+      ],
+      "$application/*": [
+        "src/application/*"
+      ],
+      "$core/*": [
+        "src/core/*"
+      ],
+      "$persistence/*": [
+        "src/persistence/*"
+      ]
+    }
   }
 }

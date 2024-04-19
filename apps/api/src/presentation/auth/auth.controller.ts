@@ -7,14 +7,17 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { RegisterUserCommand } from 'src/application/users/commands/register/register-user.command';
-import { SignUpDto } from './sign-up.dto';
+
 import { Response } from 'express';
-import { RegisterUserResult } from 'src/application/users/commands/register/register-user.result';
-import { SignInDto } from './sign-in.dto';
-import { AuthenticateQuery } from 'src/application/users/queries/authenticate/authenticate.command';
-import { AuthenticateResult } from 'src/application/users/queries/authenticate/authenticate.result';
+
+import { RegisterUserCommand } from '$application/users/commands/register/register-user.command';
+import { RegisterUserResult } from '$application/users/commands/register/register-user.result';
+import { AuthenticateQuery } from '$application/users/queries/authenticate/authenticate.command';
+import { AuthenticateResult } from '$application/users/queries/authenticate/authenticate.result';
+
 import { AccessTokenGuard } from '../guards/access-token.guard';
+import { SignInDto } from './dtos/sign-in.dto';
+import { SignUpDto } from './dtos/sign-up.dto';
 
 @Controller({
   path: 'auth',

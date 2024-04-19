@@ -1,17 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { ApiModule } from './api/api.module';
+
+import { ApiModule } from '$presentation/api.module';
 
 @Module({
-  imports: [
-    // PrismaModule,
-    // UsersModule,
-    // ApplicationModule,
-    ConfigModule.forRoot({ isGlobal: true }),
-    ApiModule,
-    // PersistenceModule,
-    // CoreModule,
-  ],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), ApiModule],
   controllers: [],
   providers: [],
 })
