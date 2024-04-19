@@ -10,6 +10,6 @@ export class SignUpDto {
   fullName: string;
 
   @IsNotEmpty({ message: 'Password is required.' })
-  // @Min(8)
+  @Min(8)
   password: string;
 }

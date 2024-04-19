@@ -1,10 +1,13 @@
 import { Module } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { PrismaModule } from '../../persistence/prisma/prisma.module';
-import { RegisterUserHandler } from './commands/register/register-user.handler';
-import { SecurityModule } from '../security/security.module';
 import { JwtModule } from '@nestjs/jwt';
+
+import { PrismaModule } from '$persistence/prisma/prisma.module';
+
+import { SecurityModule } from '../security/security.module';
+import { RegisterUserHandler } from './commands/register/register-user.handler';
+import { UpdateInfoHandler } from './commands/update-info/update-info.handler';
 import { AuthenticateHandler } from './queries/authenticate/authenticate.handler';
+import { UsersService } from './users.service';
 
 @Module({
   imports: [
@@ -13,11 +16,16 @@ import { AuthenticateHandler } from './queries/authenticate/authenticate.handler
     JwtModule.registerAsync({
       useFactory: async () => ({
         secret: process.env.TOKEN_KEY,
-        signOptions: { expiresIn: '60s' },
+        signOptions: { expiresIn: '2d' },
       }),
     }),
   ],
   exports: [UsersService],
-  providers: [UsersService, RegisterUserHandler, AuthenticateHandler],
+  providers: [
+    UsersService,
+    RegisterUserHandler,
+    UpdateInfoHandler,
+    AuthenticateHandler,
+  ],
 })
 export class UsersModule {}

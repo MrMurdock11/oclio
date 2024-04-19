@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, Min } from 'class-validator';
+import { IsEmail, IsNotEmpty } from 'class-validator';
 
 export class SignInDto {
   @IsEmail()
@@ -6,6 +6,5 @@ export class SignInDto {
   email: string;
 
   @IsNotEmpty({ message: 'Password is required.' })
-  // @Min(8)
   password: string;
 }

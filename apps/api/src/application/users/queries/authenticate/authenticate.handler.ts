@@ -1,7 +1,8 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
-import { UsersService } from '../../users.service';
-import { SecurityService } from '../../../security/security.service';
 import { JwtService } from '@nestjs/jwt';
+
+import { SecurityService } from '../../../security/security.service';
+import { UsersService } from '../../users.service';
 import { AuthenticateQuery } from './authenticate.command';
 import { AuthenticateResult } from './authenticate.result';
 
@@ -31,7 +32,7 @@ export class AuthenticateHandler implements IQueryHandler<AuthenticateQuery> {
       throw new Error('Invalid password.');
     }
 
-    const token = await this._jwtService.sign({
+    const token = await this._jwtService.signAsync({
       email: userEntity.email,
       sub: userEntity.id.toString(),
     });

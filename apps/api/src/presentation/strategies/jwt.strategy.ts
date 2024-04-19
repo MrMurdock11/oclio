@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy } from 'passport-jwt';
+
 import { Request } from 'express';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+
 import { JwtPayload } from './payload';
 
 @Injectable()
@@ -13,13 +15,13 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
           return request?.cookies?.Authentication;
         },
       ]),
-      passReqToCallback: true,
+      // passReqToCallback: true,
       ignoreExpiration: false,
       secretOrKey: process.env.TOKEN_KEY,
     });
   }
 
   async validate(payload: JwtPayload) {
-    return { userId: payload.sub, email: payload.email };
+    return { id: payload.sub, email: payload.email };
   }
 }

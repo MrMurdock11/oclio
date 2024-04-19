@@ -1,14 +1,17 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { RegisterUserCommand } from './register-user.command';
-import { UsersService } from '../../../users/users.service';
-import { SecurityService } from '../../../security/security.service';
-import { User } from '../../../../core/user-aggregate/user.aggregate';
-import { Email } from '../../../../core/user-aggregate/value-objects/email.vo';
-import { HashedPassword } from '../../../../core/user-aggregate/value-objects/hashed-password.vo';
-import { FullName } from 'src/core/user-aggregate/value-objects/full-name.vo';
-import { instanceToPlain } from 'class-transformer';
-import { Prisma } from '@prisma/client';
 import { JwtService } from '@nestjs/jwt';
+
+import { Prisma } from '@prisma/client';
+import { instanceToPlain } from 'class-transformer';
+
+import { User } from '$core/user-aggregate/user.aggregate';
+import { Email } from '$core/user-aggregate/value-objects/email.vo';
+import { FullName } from '$core/user-aggregate/value-objects/full-name.vo';
+import { HashedPassword } from '$core/user-aggregate/value-objects/hashed-password.vo';
+
+import { SecurityService } from '../../../security/security.service';
+import { UsersService } from '../../../users/users.service';
+import { RegisterUserCommand } from './register-user.command';
 import { RegisterUserResult } from './register-user.result';
 
 @CommandHandler(RegisterUserCommand)
