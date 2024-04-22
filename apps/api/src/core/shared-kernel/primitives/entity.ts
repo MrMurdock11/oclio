@@ -1,12 +1,10 @@
-import { Expose, Transform } from 'class-transformer';
-import { UniqueId } from './unique-id.vo';
+import { Expose } from 'class-transformer';
 
 export abstract class Entity {
   @Expose({ name: 'id' })
-  @Transform(({ value }) => value.value)
-  private readonly _id: UniqueId;
+  private readonly _id: bigint;
 
-  constructor(id: UniqueId) {
+  constructor(id: bigint) {
     this._id = id;
   }
 
@@ -23,6 +21,6 @@ export abstract class Entity {
       return false;
     }
 
-    return this._id.equals(other.id);
+    return this._id === other.id;
   }
 }

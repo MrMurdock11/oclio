@@ -29,7 +29,7 @@ export class AddSocialLinkHandler
       this._socialLinksService.create({
         typeId: result.value.type as number,
         url: result.value.url,
-        userId: user.id.value,
+        userId: user.id,
       });
     }
   }

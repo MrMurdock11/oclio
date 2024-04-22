@@ -5,7 +5,6 @@ import { SocialLinkType } from '../../common/enums';
 import { Result } from '../../common/result';
 import { DomainMessages } from '../shared-kernel/errors/domain.msg';
 import { Entity } from '../shared-kernel/primitives/entity';
-import { UniqueId } from '../shared-kernel/primitives/unique-id.vo';
 
 export class SocialLink extends Entity {
   @Expose({ name: 'type' })
@@ -14,7 +13,7 @@ export class SocialLink extends Entity {
   @Expose({ name: 'url' })
   private _url: string;
 
-  private constructor(id: UniqueId, type: SocialLinkType, url: string) {
+  private constructor(id: bigint, type: SocialLinkType, url: string) {
     super(id);
     this._type = type;
     this._url = url;
@@ -32,17 +31,25 @@ export class SocialLink extends Entity {
 
   // #endregion
 
-  static create(type: SocialLinkType, url: string) {
-    return new SocialLink(UniqueId.create(), type, url);
+  static create(type: SocialLinkType, url: string): Result<SocialLink> {
+    if (!this.isValidUrl(url, type)) {
+      Result.fail(DomainMessages.SocialLink.InvalidUrl(type));
+    }
+
+    return Result.ok(new SocialLink(undefined, type, url));
   }
 
   static fromPlain(plainObject: SocialLinkPrisma): SocialLink {
     const { id, typeId, url } = plainObject;
 
-    return new SocialLink(UniqueId.create(id), typeId, url);
+    return new SocialLink(id, typeId, url);
   }
 
-  updateUrl(url: string) {
+  updateUrl(url: string): Result<never> {
+    if (!SocialLink.isValidUrl(url, this._type)) {
+      return Result.fail(DomainMessages.SocialLink.InvalidUrl(this._type));
+    }
+
     this._url = url;
   }
 

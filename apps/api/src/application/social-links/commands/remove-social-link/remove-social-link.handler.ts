@@ -25,7 +25,7 @@ export class RemoveSocialLinkHandler
     if (result.isFailure()) {
       throw new Error(result.error);
     } else if (result.isSuccess()) {
-      this._socialLinksService.delete(result.value.id.value);
+      this._socialLinksService.delete(result.value.id);
     }
   }
 }

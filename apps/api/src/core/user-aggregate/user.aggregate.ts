@@ -9,7 +9,6 @@ import { SocialLinkType } from '../../common/enums';
 import { Result } from '../../common/result';
 import { DomainMessages } from '../shared-kernel/errors/domain.msg';
 import { AggregateRoot } from '../shared-kernel/primitives/aggregate-root';
-import { UniqueId } from '../shared-kernel/primitives/unique-id.vo';
 import { Photo } from './photo.model';
 import { SocialLink } from './social-link.model';
 import { Email } from './value-objects/email.vo';
@@ -43,7 +42,7 @@ export class User extends AggregateRoot {
   private _socialLinks: SocialLink[];
 
   private constructor(
-    id: UniqueId,
+    id: bigint,
     email: Email,
     fullName: FullName,
     hashedPassword: HashedPassword,
@@ -93,7 +92,7 @@ export class User extends AggregateRoot {
     fullName: FullName,
     hashedPassword: HashedPassword,
   ) {
-    return new User(UniqueId.create(), email, fullName, hashedPassword);
+    return new User(undefined, email, fullName, hashedPassword);
   }
 
   addPhoto(file: Express.Multer.File): Result<never> {
@@ -122,15 +121,20 @@ export class User extends AggregateRoot {
       return Result.fail(DomainMessages.User.SocialLinkAlreadyExists(type));
     }
 
-    const newSocialLink = SocialLink.create(type, url);
-    this._socialLinks.push(newSocialLink);
+    const result = SocialLink.create(type, url);
+    if (result.isFailure()) {
+      return result;
+    } else if (result.isSuccess()) {
+      const newSocialLink = result.value;
+      this._socialLinks.push(newSocialLink);
 
-    return Result.ok(newSocialLink);
+      return Result.ok(newSocialLink);
+    }
   }
 
   updateSocialLink(id: bigint, newUrl: string): Result<SocialLink> {
-    const socialLink = this._socialLinks.find((socialLink) =>
-      socialLink.id.equals(UniqueId.create(id)),
+    const socialLink = this._socialLinks.find(
+      (socialLink) => socialLink.id === id,
     );
 
     if (!socialLink) {
@@ -142,8 +146,8 @@ export class User extends AggregateRoot {
   }
 
   removeSocialLink(socialLinkId: bigint): Result<SocialLink> {
-    const index = this._socialLinks.findIndex((socialLink) =>
-      socialLink.id.equals(UniqueId.create(socialLinkId)),
+    const index = this._socialLinks.findIndex(
+      (socialLink) => socialLink.id === socialLinkId,
     );
     if (index === -1) {
       return Result.fail(DomainMessages.User.SocialLinkNotFound);
@@ -168,7 +172,7 @@ export class User extends AggregateRoot {
       plainObject;
 
     return new User(
-      UniqueId.create(id),
+      id,
       Email.create(email),
       FullName.create(fullName),
       HashedPassword.create(hashedPassword),

@@ -21,7 +21,7 @@ export class UploadPhotoHandler implements ICommandHandler<UploadPhotoCommand> {
 
     await this._photoService.create({
       base64: user.photo.base64,
-      userId: user.id.value,
+      userId: user.id,
     });
   }
 }

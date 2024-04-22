@@ -26,7 +26,7 @@ export class UpdateSocialLinkHandler
     if (result.isFailure()) {
       throw new Error(result.error);
     } else if (result.isSuccess()) {
-      this._socialLinksService.update(result.value.id.value, {
+      this._socialLinksService.update(result.value.id, {
         url: result.value.url,
       });
     }

@@ -19,6 +19,6 @@ export class DeletePhotoHandler implements ICommandHandler<DeletePhotoCommand> {
     const user = User.fromPlain(await this._usersService.findOneById(userId));
     user.removePhoto();
 
-    await this._photoService.deleteByUserId(user.id.value);
+    await this._photoService.deleteByUserId(user.id);
   }
 }
