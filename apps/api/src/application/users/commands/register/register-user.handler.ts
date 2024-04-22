@@ -10,7 +10,7 @@ import { FullName } from '$core/user-aggregate/value-objects/full-name.vo';
 import { HashedPassword } from '$core/user-aggregate/value-objects/hashed-password.vo';
 
 import { SecurityService } from '../../../security/security.service';
-import { UsersService } from '../../../users/users.service';
+import { UsersService } from '../../../services/users.service';
 import { RegisterUserCommand } from './register-user.command';
 import { RegisterUserResult } from './register-user.result';
 

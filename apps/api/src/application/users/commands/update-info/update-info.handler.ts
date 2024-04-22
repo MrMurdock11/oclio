@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-import { UsersService } from '../../../users/users.service';
+import { UsersService } from '../../../services/users.service';
 import { UpdateInfoCommand } from './update-info.command';
 
 @CommandHandler(UpdateInfoCommand)

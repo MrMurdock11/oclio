@@ -4,16 +4,16 @@ import { JwtModule } from '@nestjs/jwt';
 import { PrismaModule } from '$persistence/prisma/prisma.module';
 
 import { SecurityModule } from '../security/security.module';
-import { PhotosService } from '../services/photos.service';
+import { ServicesModule } from '../services/services.module';
 import { DeletePhotoHandler } from './commands/delete-photo/delete-photo.handler';
 import { RegisterUserHandler } from './commands/register/register-user.handler';
 import { UpdateInfoHandler } from './commands/update-info/update-info.handler';
 import { UploadPhotoHandler } from './commands/upload-photo/upload-photo.handler';
 import { AuthenticateHandler } from './queries/authenticate/authenticate.handler';
-import { UsersService } from './users.service';
 
 @Module({
   imports: [
+    ServicesModule,
     PrismaModule,
     SecurityModule,
     JwtModule.registerAsync({
@@ -23,10 +23,7 @@ import { UsersService } from './users.service';
       }),
     }),
   ],
-  exports: [UsersService, PhotosService],
   providers: [
-    UsersService,
-    PhotosService,
     RegisterUserHandler,
     UpdateInfoHandler,
     AuthenticateHandler,

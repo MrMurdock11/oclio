@@ -1,9 +1,11 @@
+import { SocialLink as SocialLinkPrisma } from '@prisma/client';
+import { Expose } from 'class-transformer';
+
 import { SocialLinkType } from '../../common/enums';
+import { Result } from '../../common/result';
+import { DomainMessages } from '../shared-kernel/errors/domain.msg';
 import { Entity } from '../shared-kernel/primitives/entity';
 import { UniqueId } from '../shared-kernel/primitives/unique-id.vo';
-import { DomainMessages } from '../shared-kernel/errors/domain.msg';
-import { Result } from '../../common/result';
-import { Expose } from 'class-transformer';
 
 export class SocialLink extends Entity {
   @Expose({ name: 'type' })
@@ -32,6 +34,12 @@ export class SocialLink extends Entity {
 
   static create(type: SocialLinkType, url: string) {
     return new SocialLink(UniqueId.create(), type, url);
+  }
+
+  static fromPlain(plainObject: SocialLinkPrisma): SocialLink {
+    const { id, typeId, url } = plainObject;
+
+    return new SocialLink(UniqueId.create(id), typeId, url);
   }
 
   updateUrl(url: string) {

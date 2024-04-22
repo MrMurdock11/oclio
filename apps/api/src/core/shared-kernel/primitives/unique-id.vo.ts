@@ -1,18 +1,18 @@
 import { ValueObject } from './value-object';
 
 export class UniqueId extends ValueObject<UniqueId> {
-  private readonly _id: number;
+  private readonly _id: bigint;
 
-  private constructor(id?: number) {
+  private constructor(id?: bigint) {
     super();
     this._id = id;
   }
 
-  get value(): number {
+  get value(): bigint {
     return this._id;
   }
 
-  static create(id?: number) {
+  static create(id?: bigint) {
     return new UniqueId(id);
   }
 

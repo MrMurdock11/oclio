@@ -2,7 +2,7 @@ import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
 
 import { SecurityService } from '../../../security/security.service';
-import { UsersService } from '../../users.service';
+import { UsersService } from '../../../services/users.service';
 import { AuthenticateQuery } from './authenticate.command';
 import { AuthenticateResult } from './authenticate.result';
 

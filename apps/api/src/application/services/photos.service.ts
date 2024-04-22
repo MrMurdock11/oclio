@@ -6,41 +6,41 @@ import { PrismaService } from '$persistence/prisma/prisma.service';
 
 @Injectable()
 export class PhotosService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private readonly _prismaService: PrismaService) {}
 
   async findOneById(id: bigint): Promise<Photo | null> {
-    return this.prismaService.photo.findUnique({
+    return this._prismaService.photo.findUnique({
       where: { id },
     });
   }
 
   async findAll(params: Prisma.PhotoFindManyArgs): Promise<Photo[]> {
-    return this.prismaService.photo.findMany(params);
+    return this._prismaService.photo.findMany(params);
   }
 
   async create(
     data: Prisma.PhotoCreateInput | Prisma.PhotoUncheckedCreateInput,
   ): Promise<Photo> {
-    return this.prismaService.photo.create({
+    return this._prismaService.photo.create({
       data,
     });
   }
 
   async update(id: bigint, data: Prisma.PhotoUpdateInput): Promise<Photo> {
-    return this.prismaService.photo.update({
+    return this._prismaService.photo.update({
       where: { id },
       data,
     });
   }
 
   async delete(id: bigint): Promise<Photo> {
-    return this.prismaService.photo.delete({
+    return this._prismaService.photo.delete({
       where: { id },
     });
   }
 
   async deleteByUserId(userId: bigint): Promise<Photo> {
-    return this.prismaService.photo.delete({
+    return this._prismaService.photo.delete({
       where: { userId },
     });
   }
