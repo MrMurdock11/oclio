@@ -1,0 +1,59 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	gap: 2.5rem;
+	width: 24.125rem;
+}
+
+.welcome {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+.title {
+	font-size: 1.5rem;
+	font-weight: 500;
+	color: #4E4E4E;
+}
+
+.description {
+	color: #C2C2C2;
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.actions {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.hint {
+	color: var(--base-grey, #C2C2C2);
+	align-self: flex-end;
+}
+
+.hint > .link {
+	background: var(--action-colors-link-gradient, linear-gradient(135deg, #FF81BC 0%, #FF8787 100%));
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+.divider {
+	display: grid;
+	grid-template-columns: 1fr min-content 1fr;
+	align-items: center;
+	gap: 1.25rem;
+	color: var(--base-grey, #C2C2C2);
+}
+
+.divider > hr {
+	background: #C2C2C2;
+	height: 0.0625rem;
+}
