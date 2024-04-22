@@ -11,6 +11,14 @@ import { UpdateInfoHandler } from './commands/update-info/update-info.handler';
 import { UploadPhotoHandler } from './commands/upload-photo/upload-photo.handler';
 import { AuthenticateHandler } from './queries/authenticate/authenticate.handler';
 
+const QueryHandlers = [AuthenticateHandler];
+const CommandHandlers = [
+  RegisterUserHandler,
+  UpdateInfoHandler,
+  UploadPhotoHandler,
+  DeletePhotoHandler,
+];
+
 @Module({
   imports: [
     ServicesModule,
@@ -23,12 +31,6 @@ import { AuthenticateHandler } from './queries/authenticate/authenticate.handler
       }),
     }),
   ],
-  providers: [
-    RegisterUserHandler,
-    UpdateInfoHandler,
-    AuthenticateHandler,
-    UploadPhotoHandler,
-    DeletePhotoHandler,
-  ],
+  providers: [...QueryHandlers, ...CommandHandlers],
 })
 export class UsersModule {}

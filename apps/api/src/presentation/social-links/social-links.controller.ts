@@ -47,7 +47,7 @@ export class SocialLinksController {
 
       return instanceToPlain(result.socialLinks);
     } catch (err) {
-      throw new InternalServerErrorException('');
+      throw new InternalServerErrorException(err);
     }
   }
 
@@ -59,7 +59,7 @@ export class SocialLinksController {
         new AddSocialLinkCommand(BigInt(user.id), type, url),
       );
     } catch (err) {
-      throw new InternalServerErrorException('');
+      throw new InternalServerErrorException(err);
     }
   }
 
@@ -76,7 +76,7 @@ export class SocialLinksController {
         new UpdateSocialLinkCommand(BigInt(user.id), BigInt(id), url),
       );
     } catch (err) {
-      throw new InternalServerErrorException('');
+      throw new InternalServerErrorException(err);
     }
   }
 
@@ -87,7 +87,7 @@ export class SocialLinksController {
         new RemoveSocialLinkCommand(BigInt(user.id), BigInt(id)),
       );
     } catch (err) {
-      throw new InternalServerErrorException('');
+      throw new InternalServerErrorException(err);
     }
   }
 }

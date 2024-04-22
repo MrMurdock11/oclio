@@ -9,13 +9,15 @@ import { RemoveSocialLinkHandler } from './commands/remove-social-link/remove-so
 import { UpdateSocialLinkHandler } from './commands/update-social-link/update-social-link.handler';
 import { GetSocialLinksHandler } from './queries/get-social-links/get-social-links.handler';
 
+const QueryHandlers = [GetSocialLinksHandler];
+const CommandHandlers = [
+  AddSocialLinkHandler,
+  UpdateSocialLinkHandler,
+  RemoveSocialLinkHandler,
+];
+
 @Module({
   imports: [PrismaModule, ServicesModule],
-  providers: [
-    GetSocialLinksHandler,
-    AddSocialLinkHandler,
-    UpdateSocialLinkHandler,
-    RemoveSocialLinkHandler,
-  ],
+  providers: [...QueryHandlers, ...CommandHandlers],
 })
 export class SocialLinksModule {}
