@@ -21,6 +21,7 @@ model User {
   hashedPassword String       @db.VarChar(72)
   photo          Photo?
   socialLinks    SocialLink[]
+  preferences    Json         @default("{}")
 
   @@map("users")
 }
