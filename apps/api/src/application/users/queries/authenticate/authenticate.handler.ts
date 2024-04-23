@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 
 import { SecurityService } from '../../../security/security.service';
 import { UsersService } from '../../../services/users.service';
-import { AuthenticateQuery } from './authenticate.command';
+import { AuthenticateQuery } from './authenticate.query';
 import { AuthenticateResult } from './authenticate.result';
 
 @QueryHandler(AuthenticateQuery)

@@ -12,7 +12,7 @@ import { Response } from 'express';
 
 import { RegisterUserCommand } from '$application/users/commands/register/register-user.command';
 import { RegisterUserResult } from '$application/users/commands/register/register-user.result';
-import { AuthenticateQuery } from '$application/users/queries/authenticate/authenticate.command';
+import { AuthenticateQuery } from '$application/users/queries/authenticate/authenticate.query';
 import { AuthenticateResult } from '$application/users/queries/authenticate/authenticate.result';
 
 import { AccessTokenGuard } from '../guards/access-token.guard';

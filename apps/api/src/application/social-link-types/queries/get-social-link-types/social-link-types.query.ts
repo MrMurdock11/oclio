@@ -1,1 +1,3 @@
-export class GetSocialLinkTypesQuery {}
+import { IQuery } from '@nestjs/cqrs';
+
+export class GetSocialLinkTypesQuery implements IQuery {}
