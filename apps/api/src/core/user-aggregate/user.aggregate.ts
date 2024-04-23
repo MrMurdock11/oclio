@@ -5,8 +5,10 @@ import {
 } from '@prisma/client';
 import { Expose, Transform, Type } from 'class-transformer';
 
-import { SocialLinkType } from '../../common/enums';
-import { Result } from '../../common/result';
+import { DEFAULT_USER_PREFERENCES } from 'src/common/constants';
+import { SocialLinkType } from 'src/common/enums';
+import { Result } from 'src/common/result';
+
 import { DomainMessages } from '../shared-kernel/errors/domain.msg';
 import { AggregateRoot } from '../shared-kernel/primitives/aggregate-root';
 import { Photo } from './photo.model';
@@ -14,6 +16,7 @@ import { SocialLink } from './social-link.model';
 import { Email } from './value-objects/email.vo';
 import { FullName } from './value-objects/full-name.vo';
 import { HashedPassword } from './value-objects/hashed-password.vo';
+import { Preferences } from './value-objects/preferences.vo';
 
 export class User extends AggregateRoot {
   @Expose({ name: 'email' })
@@ -41,6 +44,10 @@ export class User extends AggregateRoot {
   })
   private _socialLinks: SocialLink[];
 
+  @Expose({ name: 'preferences' })
+  @Transform(({ value }) => value.value)
+  private _preferences: Preferences;
+
   private constructor(
     id: bigint,
     email: Email,
@@ -49,6 +56,7 @@ export class User extends AggregateRoot {
     photo?: Photo,
     bio?: string,
     socialLinks: SocialLink[] = [],
+    preferences?: Preferences,
   ) {
     super(id);
     this._email = email;
@@ -57,6 +65,7 @@ export class User extends AggregateRoot {
     this._photo = photo;
     this._bio = bio;
     this._socialLinks = socialLinks;
+    this._preferences = preferences;
   }
 
   // #region getters
@@ -85,6 +94,10 @@ export class User extends AggregateRoot {
     return this._socialLinks;
   }
 
+  get preferences() {
+    return this._preferences;
+  }
+
   // #endregion
 
   static create(
@@ -92,7 +105,16 @@ export class User extends AggregateRoot {
     fullName: FullName,
     hashedPassword: HashedPassword,
   ) {
-    return new User(undefined, email, fullName, hashedPassword);
+    return new User(
+      undefined,
+      email,
+      fullName,
+      hashedPassword,
+      undefined,
+      undefined,
+      [],
+      Preferences.create(DEFAULT_USER_PREFERENCES),
+    );
   }
 
   addPhoto(file: Express.Multer.File): Result<never> {
@@ -163,13 +185,25 @@ export class User extends AggregateRoot {
     this._bio = newBio;
   }
 
+  updatePreferences(preferences: Record<string, string>) {
+    this._preferences = Preferences.create(preferences);
+  }
+
   static fromPlain(
     plainObject: PrismaUser & { photo: PrismaPhoto } & {
       socialLinks: PrismaSocialLink[];
     },
   ): User {
-    const { id, email, fullName, hashedPassword, photo, bio, socialLinks } =
-      plainObject;
+    const {
+      id,
+      email,
+      fullName,
+      hashedPassword,
+      photo,
+      bio,
+      socialLinks,
+      preferences,
+    } = plainObject;
 
     return new User(
       id,
@@ -179,6 +213,7 @@ export class User extends AggregateRoot {
       photo ? Photo.fromPlain(photo) : undefined,
       bio,
       socialLinks ? socialLinks.map(SocialLink.fromPlain) : undefined,
+      Preferences.create(preferences as Record<string, string>),
     );
   }
 }

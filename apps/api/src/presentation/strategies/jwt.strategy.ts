@@ -4,6 +4,8 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
+import { ContextUser } from 'src/common/interfaces';
+
 import { JwtPayload } from './payload';
 
 @Injectable()
@@ -21,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: JwtPayload) {
-    return { id: payload.sub, email: payload.email };
+  async validate(payload: JwtPayload): Promise<ContextUser> {
+    return { id: BigInt(payload.sub), email: payload.email };
   }
 }

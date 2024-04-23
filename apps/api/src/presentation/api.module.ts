@@ -10,6 +10,7 @@ import { SocialLinkTypesController } from './social-link-types/social-link-types
 import { SocialLinksController } from './social-links/social-links.controller';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { UsersController } from './users/users.controller';
+import { PreferencesController } from './preferences/preferences.controller';
 
 @Module({
   imports: [ApplicationModule, CqrsModule, PassportModule],
@@ -18,6 +19,7 @@ import { UsersController } from './users/users.controller';
     AuthController,
     SocialLinksController,
     SocialLinkTypesController,
+    PreferencesController,
   ],
   providers: [JwtStrategy, AccessTokenGuard],
 })
