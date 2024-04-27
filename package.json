@@ -10,7 +10,8 @@
   },
   "workspaces": [
     "apps/api",
-    "apps/ui"
+    "apps/ui",
+    "apps/desktop"
   ],
   "keywords": [],
   "author": "Azamat Mambetov",
