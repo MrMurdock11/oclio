@@ -1,10 +1,21 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MongooseModule } from '@nestjs/mongoose';
+
+import { PresentationModule } from './presentation/presentation.module';
+import { EnvKey } from './shared/enums';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    PresentationModule,
+    MongooseModule.forRootAsync({
+      imports: [ConfigModule.forRoot({ expandVariables: true })],
+      useFactory: (configService: ConfigService) => ({
+        uri: configService.get(EnvKey.ConnectionString),
+        dbName: configService.get(EnvKey.Database),
+      }),
+      inject: [ConfigService],
+    }),
+  ],
 })
 export class AppModule {}

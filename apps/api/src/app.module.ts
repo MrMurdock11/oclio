@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { ApiModule } from '$presentation/api.module';
+import { PresentationModule } from '$presentation/presentation.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), ApiModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), PresentationModule],
   controllers: [],
   providers: [],
 })

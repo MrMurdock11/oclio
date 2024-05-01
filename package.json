@@ -4,14 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently 'npm run start:ui' 'npm run start:api'",
-    "start:ui": "npm run dev -w apps/ui",
-    "start:api": "npm start -w apps/api"
+    "start": "concurrently 'npm run start:web' 'npm run start:gateway'",
+    "start:web": "npm run dev -w apps/ui",
+    "start:gateway": "npm start -w apps/api"
   },
   "workspaces": [
     "apps/api",
     "apps/ui",
-    "apps/desktop"
+    "apps/desktop",
+    "apps/books-management",
+    "packages/core"
   ],
   "keywords": [],
   "author": "Azamat Mambetov",
