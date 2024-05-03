@@ -1,4 +1,4 @@
-import { Entity, UNCREATED_ID } from '@oclio/core';
+import { Entity, UNCREATED_ID } from '@oclio/common';
 
 export class Chapter extends Entity {
   private _title: string;

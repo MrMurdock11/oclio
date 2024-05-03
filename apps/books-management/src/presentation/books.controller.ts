@@ -2,8 +2,7 @@ import { Controller } from '@nestjs/common';
 import { CommandBus } from '@nestjs/cqrs';
 import { MessagePattern } from '@nestjs/microservices';
 
-import { CreateBookCommand } from 'src/application/books/commands/create-book/create-book.command';
-
+import { CreateBookCommand } from '../application/books/commands/create-book/create-book.command';
 import { CreateBookPayload } from './payload/create-book.payload';
 
 @Controller()

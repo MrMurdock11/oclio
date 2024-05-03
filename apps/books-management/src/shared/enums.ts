@@ -1,4 +1,4 @@
 export const enum EnvKey {
-  ConnectionString = 'CONNECTION_STRING',
-  Database = 'DATABASE',
+  ConnectionString = 'MONGODB_CONNECTION_STRING',
+  Database = 'MONGODB_NAME',
 }

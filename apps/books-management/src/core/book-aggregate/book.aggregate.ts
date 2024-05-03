@@ -1,5 +1,4 @@
-import { AggregateRoot } from '@oclio/core';
-import { UNCREATED_ID } from '@oclio/core';
+import { AggregateRoot, UNCREATED_ID } from '@oclio/common';
 
 import { Chapter } from './chapter.model';
 

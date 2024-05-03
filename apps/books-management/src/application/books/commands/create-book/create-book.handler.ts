@@ -1,9 +1,7 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-import { Book } from '$core/book-aggregate/book.aggregate';
-
-import { BooksRepository } from '$persistence/books.repository';
-
+import { Book } from '../../../../core/book-aggregate/book.aggregate';
+import { BooksRepository } from '../../../../persistence/books.repository';
 import { CreateBookCommand } from './create-book.command';
 
 @CommandHandler(CreateBookCommand)

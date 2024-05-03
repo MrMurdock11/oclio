@@ -8,7 +8,7 @@ async function bootstrap() {
     AppModule,
     {
       transport: Transport.TCP,
-      options: { port: Number.parseInt(process.env.MICROSERVICE_PORT) },
+      options: { port: Number.parseInt(process.env.BOOKS_MANAGEMENT_PORT) },
     },
   );
   await app.listen();

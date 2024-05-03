@@ -9,7 +9,11 @@ import { EnvKey } from './shared/enums';
   imports: [
     PresentationModule,
     MongooseModule.forRootAsync({
-      imports: [ConfigModule.forRoot({ expandVariables: true })],
+      imports: [
+        ConfigModule.forRoot({
+          expandVariables: true,
+        }),
+      ],
       useFactory: (configService: ConfigService) => ({
         uri: configService.get(EnvKey.ConnectionString),
         dbName: configService.get(EnvKey.Database),
