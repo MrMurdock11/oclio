@@ -2,8 +2,9 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 
+import { EnvKey } from '@oclio/common/enums';
+
 import { PresentationModule } from './presentation/presentation.module';
-import { EnvKey } from './shared/enums';
 
 @Module({
   imports: [

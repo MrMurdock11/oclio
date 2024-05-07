@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 
 import { PrismaModule } from '../../persistence/prisma/prisma.module';
-
 import { PhotosService } from './photos.service';
 import { SocialLinksService } from './social-links.service';
 import { UsersService } from './users.service';

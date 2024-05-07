@@ -1,9 +1,7 @@
 import { Module } from '@nestjs/common';
 
-import { ServicesModule } from '../services/services.module';
-
 import { PrismaModule } from '../../persistence/prisma/prisma.module';
-
+import { ServicesModule } from '../services/services.module';
 import { AddSocialLinkHandler } from './commands/add-social-link/add-social-link.handler';
 import { RemoveSocialLinkHandler } from './commands/remove-social-link/remove-social-link.handler';
 import { UpdateSocialLinkHandler } from './commands/update-social-link/update-social-link.handler';

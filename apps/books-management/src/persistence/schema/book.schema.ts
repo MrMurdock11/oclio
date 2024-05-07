@@ -1,17 +1,21 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-import { Types } from 'mongoose';
+import { BookStatus } from '../../shared/enums';
+import { Chapter } from './chapter.schema';
 
-@Schema()
+@Schema({ timestamps: true })
 export class Book {
   @Prop({ type: String, required: true })
   title: string;
 
-  @Prop({ type: Types.ObjectId })
-  chapters?: Types.ObjectId[];
+  @Prop({ required: true, type: Number })
+  status: BookStatus;
 
-  @Prop({ type: Number, required: true, ref: 'Chapter' })
-  createdBy: number;
+  @Prop({ type: [Chapter], default: [] })
+  chapters: Chapter[];
+
+  @Prop({ type: BigInt, required: true })
+  createdBy: bigint;
 }
 
 export const BookSchema = SchemaFactory.createForClass(Book);

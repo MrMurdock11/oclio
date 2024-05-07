@@ -9,12 +9,13 @@ export class CreateBookHandler implements ICommandHandler<CreateBookCommand> {
   constructor(private readonly _booksRepository: BooksRepository) {}
 
   async execute(command: CreateBookCommand): Promise<void> {
-    const { title, createdBy } = command;
+    const { title, userId } = command;
 
-    const book = Book.create(title, createdBy);
-    await this._booksRepository.create({
-      title: book.title,
-      createdBy: book.createdBy,
-    });
+    const result = Book.create(title, userId);
+    if (result.isSuccess()) {
+      await this._booksRepository.create(result.value);
+    } else if (result.isFailure()) {
+      throw new Error(result.error);
+    }
   }
 }

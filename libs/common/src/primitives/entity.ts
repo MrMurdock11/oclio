@@ -1,7 +1,7 @@
-export abstract class Entity {
-  private readonly _id: bigint;
+export abstract class Entity<Type extends string | bigint> {
+  protected readonly _id: Type;
 
-  constructor(id: bigint) {
+  constructor(id: Type) {
     this._id = id;
   }
 
@@ -9,7 +9,7 @@ export abstract class Entity {
     return this._id;
   }
 
-  equals(other: Entity | null): boolean {
+  equals(other: Entity<Type> | null): boolean {
     if (other === null || other === undefined) {
       return false;
     }
