@@ -11,6 +11,8 @@ export class Chapter extends Entity<string> {
     this._text = text;
   }
 
+  // #region Getters
+
   get title() {
     return this._title;
   }
@@ -19,9 +21,23 @@ export class Chapter extends Entity<string> {
     return this._text;
   }
 
+  // #endregion
+
+  update(title?: string, text?: string) {
+    if (title || this._title !== title) {
+      this._title = title;
+    }
+
+    if (text || this._text !== text) {
+      this._text = text;
+    }
+  }
+
   static create(title: string, text: string): Chapter {
     return new Chapter(UNCREATED_ID, title, text);
   }
+
+  // #region Mappers
 
   static toDomain<Entity extends Record<string, any>>(entity: Entity): Chapter {
     const { id, title, text } = entity;
@@ -44,4 +60,6 @@ export class Chapter extends Entity<string> {
       text: this._text,
     } as unknown as T;
   }
+
+  // #endregion
 }

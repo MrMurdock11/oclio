@@ -12,10 +12,8 @@ export class CreateBookHandler implements ICommandHandler<CreateBookCommand> {
     const { title, userId } = command;
 
     const result = Book.create(title, userId);
-    if (result.isSuccess()) {
-      await this._booksRepository.create(result.value);
-    } else if (result.isFailure()) {
-      throw new Error(result.error);
-    }
+
+    const createdBook = result.getOrThrow();
+    await this._booksRepository.create(createdBook);
   }
 }

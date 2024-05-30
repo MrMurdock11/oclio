@@ -5,9 +5,13 @@ export const enum EnvKey {
 }
 
 export const enum BooksManagementPattern {
-  CreateBook = 'create-book',
-  GetBook = 'get-book',
-  GetBooks = 'get-books',
+  CreateBook = 'books-management.create-book',
+  GetBook = 'books-management.get-book',
+  GetBooks = 'books-management.get-books',
+  CreateChapter = 'books-management.create-chapter',
+  GetChapter = 'books-management.get-chapter',
+  UpdateChapter = 'books.management.update-chapter',
+  DeleteChapter = 'books-management.delete-chapter',
 }
 
 export const enum Microservice {

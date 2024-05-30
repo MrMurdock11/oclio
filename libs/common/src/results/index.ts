@@ -1,2 +1,3 @@
-export * from './get-book.result';
-export * from './get-books.result';
+export * from './books';
+export * from './chapters';
+export * from './rpc';

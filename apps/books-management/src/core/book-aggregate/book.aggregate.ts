@@ -36,6 +36,8 @@ export class Book extends AggregateRoot<string> {
     this._updatedAt = updatedAt;
   }
 
+  // #region Getters
+
   get title() {
     return this._title;
   }
@@ -60,6 +62,42 @@ export class Book extends AggregateRoot<string> {
     return this.updatedAt;
   }
 
+  // #endregion
+
+  addChapter(title: string): Result<Chapter> {
+    if (!title) {
+      return Result.fail(ErrorMessages.Book.InvalidArgumentsToCreateChapter);
+    }
+
+    const newChapter = Chapter.create(title, '');
+    this._chapters.push(newChapter);
+
+    return Result.ok(newChapter);
+  }
+
+  updateChapter(
+    chapterId: string,
+    title?: string,
+    text?: string,
+  ): Result<Chapter> {
+    const chapter = this.chapters.find((c) => c.id === chapterId);
+    if (!chapter) {
+      return Result.fail(`Not found chapter by ID ${chapterId}`);
+    }
+
+    chapter.update(title, text);
+    return Result.ok(chapter);
+  }
+
+  deleteChapter(chapterId: string): Result<never> {
+    const index = this._chapters.findIndex((ch) => ch.id === chapterId);
+    if (index === -1) {
+      return Result.fail(`Not found chapter by ID ${chapterId}`);
+    }
+    this._chapters.splice(index, 1);
+    return Result.ok();
+  }
+
   static create(title: string, createdBy: bigint): Result<Book> {
     if (!title || !createdBy || createdBy === 0n) {
       return Result.fail(ErrorMessages.Book.InvalidArgumentsToCreateBook);
@@ -76,24 +114,19 @@ export class Book extends AggregateRoot<string> {
     );
   }
 
-  static toDomain<Entity extends Record<string, any>>(
-    entity: Entity,
-  ): Result<Book> {
-    if (!entity) {
-      return Result.fail(ErrorMessages.Book.EntityIsEmpty);
-    }
+  static toDomain<T extends Record<string, any>>(entity: T): Book {
+    const { id, title, chapters, createdBy, status, createdAt, updatedAt } =
+      entity;
 
-    return Result.ok(this.mapToDomain(entity));
-  }
-
-  static toDomainArray<Entity extends Record<string, any>[]>(
-    entities: Entity,
-  ): Result<Book[]> {
-    if (!entities) {
-      return Result.fail(ErrorMessages.Book.EntityIsEmpty);
-    }
-
-    return Result.ok(entities.map(this.mapToDomain));
+    return new Book(
+      id,
+      title,
+      chapters.map(Chapter.toDomain),
+      createdBy,
+      status,
+      createdAt,
+      updatedAt,
+    );
   }
 
   toPresentation<T extends Record<string, any>>(): T {
@@ -101,7 +134,7 @@ export class Book extends AggregateRoot<string> {
       id: this._id,
       title: this._title,
       status: this._status,
-      // chapters: this._chapters.map((c) => c.toPresentation()),
+      chapters: this._chapters.map((c) => c.toPresentation()),
       createdBy: this._createdBy.toString(),
       createdAt: this._createdAt,
       updatedAt: this._updatedAt,
@@ -118,20 +151,5 @@ export class Book extends AggregateRoot<string> {
       createdAt: this._createdAt,
       updatedAt: this._updatedAt,
     } as unknown as T;
-  }
-
-  private static mapToDomain<T extends Record<string, any>>(entity: T): Book {
-    const { id, title, chapters, createdBy, status, createdAt, updatedAt } =
-      entity;
-
-    return new Book(
-      id,
-      title,
-      chapters.map(Chapter.toDomain),
-      createdBy,
-      status,
-      createdAt,
-      updatedAt,
-    );
   }
 }

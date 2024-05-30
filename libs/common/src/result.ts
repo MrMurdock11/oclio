@@ -1,42 +1,28 @@
-type DomainError = string;
+import { RpcException } from '@nestjs/microservices';
 
-export abstract class Result<T> {
-  public static ok<U>(value: U): Result<U> {
-    return new Ok(value);
+export class Result<T, E extends string = string> {
+  private readonly _success: boolean;
+
+  protected constructor(
+    private readonly _value?: T,
+    private readonly _error?: E,
+  ) {
+    this._success = _error === undefined;
   }
 
-  public static fail<E extends DomainError>(error: E): Result<never> {
-    return new Err(error);
+  public static ok<U>(value: U = undefined): Result<U, never> {
+    return new Result(value);
   }
 
-  public abstract isSuccess(): this is Ok<T>;
-  public abstract isFailure(): this is Err;
-}
-
-class Ok<T> extends Result<T> {
-  constructor(public readonly value: T) {
-    super();
+  public static fail<F extends string>(error: F): Result<never, F> {
+    return new Result<never, F>(undefined as never, error);
   }
 
-  public isSuccess(): this is Ok<T> {
-    return true;
-  }
-
-  public isFailure(): this is Err {
-    return false;
-  }
-}
-
-class Err extends Result<never> {
-  constructor(public readonly error: DomainError) {
-    super();
-  }
-
-  public isSuccess(): this is Ok<never> {
-    return false;
-  }
-
-  public isFailure(): this is Err {
-    return true;
+  public getOrThrow(): T {
+    if (this._success) {
+      return this._value;
+    } else {
+      throw new RpcException(this._error);
+    }
   }
 }

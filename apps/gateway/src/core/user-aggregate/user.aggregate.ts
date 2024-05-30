@@ -5,12 +5,12 @@ import {
 } from '@prisma/client';
 import { Expose, Transform, Type } from 'class-transformer';
 
+import { AggregateRoot } from '@oclio/common';
+
 import { DEFAULT_USER_PREFERENCES } from '../../common/constants';
 import { SocialLinkType } from '../../common/enums';
 import { Result } from '../../common/result';
-
 import { DomainMessages } from '../shared-kernel/errors/domain.msg';
-import { AggregateRoot } from '../shared-kernel/primitives/aggregate-root';
 import { Photo } from './photo.model';
 import { SocialLink } from './social-link.model';
 import { Email } from './value-objects/email.vo';
@@ -18,7 +18,7 @@ import { FullName } from './value-objects/full-name.vo';
 import { HashedPassword } from './value-objects/hashed-password.vo';
 import { Preferences } from './value-objects/preferences.vo';
 
-export class User extends AggregateRoot {
+export class User extends AggregateRoot<bigint> {
   @Expose({ name: 'email' })
   @Transform(({ value }) => value.value, { toPlainOnly: true })
   private _email: Email;
