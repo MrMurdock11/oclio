@@ -2,7 +2,7 @@ import { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common';
 
 import { Observable, map } from 'rxjs';
 
-import { RpcResult } from '@oclio/common/results';
+import { RpcResult } from '@oclio/common/rpc-result';
 
 export class RpcResultInterceptor implements NestInterceptor {
   intercept(

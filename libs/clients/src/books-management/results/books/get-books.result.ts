@@ -1,5 +1,4 @@
 import { BookDto } from '@oclio/common/dto';
-
-import { RpcResult } from '../rpc/rpc-result';
+import { RpcResult } from '@oclio/common/rpc-result';
 
 export type GetBooksResult = RpcResult<BookDto[]>;

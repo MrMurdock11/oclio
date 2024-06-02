@@ -7,19 +7,19 @@ import {
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { MessagePattern, RpcException } from '@nestjs/microservices';
 
-import { BookDto } from '@oclio/common/dto';
-import { BooksManagementPattern } from '@oclio/common/enums';
 import {
   CreateBookPayload,
   GetBookPayload,
   GetBooksPayload,
-} from '@oclio/common/payloads';
+} from '@oclio/clients/books-management/payloads';
 import {
   CreateBookResult,
   GetBookResult,
   GetBooksResult,
-  RpcResult,
-} from '@oclio/common/results';
+} from '@oclio/clients/books-management/results';
+import { BookDto } from '@oclio/common/dto';
+import { BooksManagementPattern } from '@oclio/common/enums';
+import { RpcResult } from '@oclio/common/rpc-result';
 
 import { CreateBookCommand } from '../application/books/commands/create-book/create-book.command';
 import { GetBookQuery } from '../application/books/queries/get-book/get-book.query';

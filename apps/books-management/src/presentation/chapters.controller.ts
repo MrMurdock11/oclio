@@ -7,18 +7,18 @@ import {
 import { CommandBus } from '@nestjs/cqrs';
 import { MessagePattern, RpcException } from '@nestjs/microservices';
 
-import { BooksManagementPattern } from '@oclio/common/enums';
 import {
   CreateChapterPayload,
   DeleteChapterPayload,
   UpdateChapterPayload,
-} from '@oclio/common/payloads';
+} from '@oclio/clients/books-management/payloads';
 import {
   CreateChapterResult,
   DeleteChapterResult,
   UpdateChapterResult,
-} from '@oclio/common/results';
-import { RpcResult } from '@oclio/common/results/rpc/rpc-result';
+} from '@oclio/clients/books-management/results';
+import { BooksManagementPattern } from '@oclio/common/enums';
+import { RpcResult } from '@oclio/common/rpc-result';
 
 import { CreateChapterCommand } from '../application/chapters/commands/create-chapter/create-chapter.command';
 import { DeleteChapterCommand } from '../application/chapters/commands/delete-chapter/delete-chapter.command';

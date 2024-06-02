@@ -4,36 +4,23 @@ import {
   Delete,
   Get,
   HttpException,
-  Inject,
   InternalServerErrorException,
   Param,
   Post,
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { ClientProxy } from '@nestjs/microservices';
 
-import { firstValueFrom, map } from 'rxjs';
-
-import { AccessTokenGuard, ContextUser, CurrentUser } from '@oclio/common/auth';
-import { BooksManagementPattern, Microservice } from '@oclio/common/enums';
+import { BooksManagementService } from '@oclio/clients/books-management/books-management.service';
 import {
   CreateBookPayload,
+  CreateChapterPayload,
   DeleteChapterPayload,
   GetBookPayload,
   GetBooksPayload,
   UpdateChapterPayload,
-} from '@oclio/common/payloads';
-import { CreateChapterPayload } from '@oclio/common/payloads/books-management/chapters/create-chapter.payload';
-import {
-  CreateBookResult,
-  CreateChapterResult,
-  DeleteChapterResult,
-  GetBookResult,
-  GetBooksResult,
-  RpcResult,
-  UpdateChapterResult,
-} from '@oclio/common/results';
+} from '@oclio/clients/books-management/payloads';
+import { AccessTokenGuard, ContextUser, CurrentUser } from '@oclio/common/auth';
 
 import { ChapterUpdateDto } from './dto/chapter-update.dto';
 
@@ -44,8 +31,7 @@ import { ChapterUpdateDto } from './dto/chapter-update.dto';
 })
 export class BooksController {
   constructor(
-    @Inject(Microservice.BooksManagement)
-    private readonly _client: ClientProxy,
+    private readonly _booksManagementService: BooksManagementService,
   ) {}
 
   // #region Books
@@ -53,16 +39,9 @@ export class BooksController {
   @Post()
   async create(@CurrentUser() user: ContextUser, @Body('title') title: string) {
     try {
-      const result = await firstValueFrom(
-        this._client
-          .send(
-            { cmd: BooksManagementPattern.CreateBook },
-            new CreateBookPayload(title, user.id.toString()),
-          )
-          .pipe(map<any, CreateBookResult>((json) => RpcResult.fromJson(json))),
+      await this._booksManagementService.createBook(
+        new CreateBookPayload(title, user.id.toString()),
       );
-
-      result.getOrThrow();
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;
@@ -77,16 +56,10 @@ export class BooksController {
   @Get('/:id')
   async get(@Param('id') id: string, @CurrentUser() user: ContextUser) {
     try {
-      const result = await firstValueFrom(
-        this._client
-          .send(
-            { cmd: BooksManagementPattern.GetBook },
-            new GetBookPayload(id, user.id.toString()),
-          )
-          .pipe(map<any, GetBookResult>((json) => RpcResult.fromJson(json))),
+      const book = await this._booksManagementService.getBook(
+        new GetBookPayload(id, user.id.toString()),
       );
 
-      const book = result.getOrThrow();
       return book;
     } catch (error) {
       if (error instanceof HttpException) {
@@ -102,16 +75,10 @@ export class BooksController {
   @Get()
   async getAll(@CurrentUser() user: ContextUser) {
     try {
-      const result = await firstValueFrom(
-        this._client
-          .send(
-            { cmd: BooksManagementPattern.GetBooks },
-            new GetBooksPayload(user.id.toString()),
-          )
-          .pipe(map<any, GetBooksResult>((json) => RpcResult.fromJson(json))),
+      const books = await this._booksManagementService.getAllBooks(
+        new GetBooksPayload(user.id.toString()),
       );
 
-      const books = result.getOrThrow();
       return books;
     } catch (error) {
       if (error instanceof HttpException) {
@@ -135,18 +102,9 @@ export class BooksController {
     @Body('title') title: string,
   ): Promise<void> {
     try {
-      const result = await firstValueFrom(
-        this._client
-          .send(
-            { cmd: BooksManagementPattern.CreateChapter },
-            new CreateChapterPayload(bookId, user.id.toString(), title),
-          )
-          .pipe(
-            map<any, CreateChapterResult>((json) => RpcResult.fromJson(json)),
-          ),
+      await this._booksManagementService.createChapter(
+        new CreateChapterPayload(bookId, user.id.toString(), title),
       );
-
-      result.getOrThrow();
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;
@@ -168,24 +126,15 @@ export class BooksController {
     const { title, text } = body;
 
     try {
-      const result = await firstValueFrom(
-        this._client
-          .send(
-            { cmd: BooksManagementPattern.UpdateChapter },
-            new UpdateChapterPayload(
-              bookId,
-              chapterId,
-              user.id.toString(),
-              title,
-              text,
-            ),
-          )
-          .pipe(
-            map<any, UpdateChapterResult>((json) => RpcResult.fromJson(json)),
-          ),
+      await this._booksManagementService.updateChapter(
+        new UpdateChapterPayload(
+          bookId,
+          chapterId,
+          user.id.toString(),
+          title,
+          text,
+        ),
       );
-
-      result.getOrThrow();
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;
@@ -204,18 +153,9 @@ export class BooksController {
     @CurrentUser() user: ContextUser,
   ): Promise<void> {
     try {
-      const result = await firstValueFrom(
-        this._client
-          .send(
-            { cmd: BooksManagementPattern.DeleteChapter },
-            new DeleteChapterPayload(bookId, chapterId, user.id.toString()),
-          )
-          .pipe(
-            map<any, DeleteChapterResult>((json) => RpcResult.fromJson(json)),
-          ),
+      await this._booksManagementService.deleteChapter(
+        new DeleteChapterPayload(bookId, chapterId, user.id.toString()),
       );
-
-      result.getOrThrow();
     } catch (error) {
       if (error instanceof HttpException) {
         throw error;

@@ -14,6 +14,6 @@ async function bootstrap() {
     type: VersioningType.URI,
   });
 
-  await app.listen(3000);
+  await app.listen(Number.parseInt(process.env.GATEWAY_PORT));
 }
 bootstrap();

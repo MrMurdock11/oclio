@@ -1,6 +1,7 @@
 export const enum EnvKey {
   ConnectionString = 'MONGODB_CONNECTION_STRING',
   Database = 'MONGODB_NAME',
+  BooksManagementHost = 'BOOKS_MANAGEMENT_HOST',
   BooksManagementPort = 'BOOKS_MANAGEMENT_PORT',
 }
 
