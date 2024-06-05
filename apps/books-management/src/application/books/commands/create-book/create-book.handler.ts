@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
-import { Book } from '../../../../core/book-aggregate/book.aggregate';
+import { Author } from '../../../../core/author-aggregate/author.aggregate';
 import { BooksRepository } from '../../../../persistence/books.repository';
 import { CreateBookCommand } from './create-book.command';
 
@@ -11,9 +11,9 @@ export class CreateBookHandler implements ICommandHandler<CreateBookCommand> {
   async execute(command: CreateBookCommand): Promise<void> {
     const { title, userId } = command;
 
-    const result = Book.create(title, userId);
-
-    const createdBook = result.getOrThrow();
+    const author = Author.toDomain({ id: userId });
+    const addBookResult = author.addBook(title);
+    const createdBook = addBookResult.getOrThrow();
     await this._booksRepository.create(createdBook);
   }
 }

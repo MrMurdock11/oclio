@@ -9,11 +9,15 @@ import { MessagePattern, RpcException } from '@nestjs/microservices';
 
 import {
   CreateBookPayload,
+  DeleteBookPayload,
+  DeleteBooksPayload,
   GetBookPayload,
   GetBooksPayload,
 } from '@oclio/clients/books-management/payloads';
 import {
   CreateBookResult,
+  DeleteBookResult,
+  DeleteBooksResult,
   GetBookResult,
   GetBooksResult,
 } from '@oclio/clients/books-management/results';
@@ -22,6 +26,8 @@ import { BooksManagementPattern } from '@oclio/common/enums';
 import { RpcResult } from '@oclio/common/rpc-result';
 
 import { CreateBookCommand } from '../application/books/commands/create-book/create-book.command';
+import { DeleteBookCommand } from '../application/books/commands/delete-book/delete-book.command';
+import { DeleteBooksCommand } from '../application/books/commands/delete-books/delete-books.command';
 import { GetBookQuery } from '../application/books/queries/get-book/get-book.query';
 import { GetBooksQuery } from '../application/books/queries/get-books/get-books.query';
 import { Book } from '../core/book-aggregate/book.aggregate';
@@ -100,6 +106,50 @@ export class BooksController {
       }
 
       throw new RpcException('An error occurred while deleting the chapter');
+    }
+  }
+
+  @MessagePattern({ cmd: BooksManagementPattern.DeleteBook })
+  async deleteBook(payload: DeleteBookPayload): Promise<DeleteBookResult> {
+    const { bookId, userId } = payload;
+
+    try {
+      await this._commandBus.execute(
+        new DeleteBookCommand(bookId, BigInt(userId)),
+      );
+      return RpcResult.ok(HttpStatus.OK);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        return RpcResult.fail(HttpStatus.NOT_FOUND, error.message);
+      }
+
+      if (error instanceof RpcException) {
+        return RpcResult.fail(HttpStatus.BAD_REQUEST, error.message);
+      }
+
+      throw new RpcException('An error occurred while deleting the book');
+    }
+  }
+
+  @MessagePattern({ cmd: BooksManagementPattern.DeleteBooks })
+  async deleteBooks(payload: DeleteBooksPayload): Promise<DeleteBooksResult> {
+    const { bookIds, userId } = payload;
+
+    try {
+      await this._commandBus.execute(
+        new DeleteBooksCommand(bookIds, BigInt(userId)),
+      );
+      return RpcResult.ok(HttpStatus.OK);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        return RpcResult.fail(HttpStatus.NOT_FOUND, error.message);
+      }
+
+      if (error instanceof RpcException) {
+        return RpcResult.fail(HttpStatus.BAD_REQUEST, error.message);
+      }
+
+      throw new RpcException('An error occurred while deleting the books');
     }
   }
 }

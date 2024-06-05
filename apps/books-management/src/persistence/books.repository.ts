@@ -34,6 +34,10 @@ export class BooksRepository {
     return entities.map((entity) => Book.toDomain(entity));
   }
 
+  async delete(ids: string[]): Promise<void> {
+    await this.bookModel.deleteMany({ _id: { $in: ids } }).exec();
+  }
+
   async createChapter(bookId: string, chapter: Chapter): Promise<void> {
     const createResult = await this.bookModel
       .updateOne(

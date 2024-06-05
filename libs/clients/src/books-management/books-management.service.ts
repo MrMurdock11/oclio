@@ -10,6 +10,8 @@ import { RpcResult } from '@oclio/common/rpc-result';
 import {
   CreateBookPayload,
   CreateChapterPayload,
+  DeleteBookPayload,
+  DeleteBooksPayload,
   DeleteChapterPayload,
   GetBookPayload,
   GetBooksPayload,
@@ -18,6 +20,8 @@ import {
 import {
   CreateBookResult,
   CreateChapterResult,
+  DeleteBookResult,
+  DeleteBooksResult,
   DeleteChapterResult,
   GetBookResult,
   GetBooksResult,
@@ -63,6 +67,26 @@ export class BooksManagementService {
 
     const books = result.getOrThrow();
     return books;
+  }
+
+  async deleteBook(payload: DeleteBookPayload): Promise<void> {
+    const result = await firstValueFrom(
+      this._client
+        .send({ cmd: BooksManagementPattern.DeleteBook }, payload)
+        .pipe(map<any, DeleteBookResult>(RpcResult.fromJson)),
+    );
+
+    result.getOrThrow();
+  }
+
+  async deleteBooks(payload: DeleteBooksPayload): Promise<void> {
+    const result = await firstValueFrom(
+      this._client
+        .send({ cmd: BooksManagementPattern.DeleteBooks }, payload)
+        .pipe(map<any, DeleteBooksResult>(RpcResult.fromJson)),
+    );
+
+    result.getOrThrow();
   }
 
   // #endregion

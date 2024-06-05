@@ -98,19 +98,13 @@ export class Book extends AggregateRoot<string> {
     return Result.ok();
   }
 
-  static create(title: string, createdBy: bigint): Result<Book> {
-    if (!title || !createdBy || createdBy === 0n) {
-      return Result.fail(ErrorMessages.Book.InvalidArgumentsToCreateBook);
-    }
-
-    return Result.ok(
-      new Book(
-        UNCREATED_ID,
-        title,
-        [Chapter.create('Chapter Title', 'Chapter Text')],
-        createdBy,
-        BookStatus.Draft,
-      ),
+  static create(title: string, createdBy: bigint): Book {
+    return new Book(
+      UNCREATED_ID,
+      title,
+      [Chapter.create('Chapter Title', 'Chapter Text')],
+      createdBy,
+      BookStatus.Draft,
     );
   }
 

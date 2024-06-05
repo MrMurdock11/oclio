@@ -15,6 +15,8 @@ import { BooksManagementService } from '@oclio/clients/books-management/books-ma
 import {
   CreateBookPayload,
   CreateChapterPayload,
+  DeleteBookPayload,
+  DeleteBooksPayload,
   DeleteChapterPayload,
   GetBookPayload,
   GetBooksPayload,
@@ -87,6 +89,46 @@ export class BooksController {
 
       throw new InternalServerErrorException(
         'An error occurred while getting the books',
+      );
+    }
+  }
+
+  @Delete('/:id')
+  async deleteBook(
+    @Param('id') bookId: string,
+    @CurrentUser() user: ContextUser,
+  ) {
+    try {
+      await this._booksManagementService.deleteBook(
+        new DeleteBookPayload(bookId, user.id.toString()),
+      );
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException(
+        'An error occurred while deleting the book',
+      );
+    }
+  }
+
+  @Delete()
+  async deleteBooks(
+    @Body('bookIds') bookIds: string[],
+    @CurrentUser() user: ContextUser,
+  ) {
+    try {
+      await this._booksManagementService.deleteBooks(
+        new DeleteBooksPayload(bookIds, user.id.toString()),
+      );
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException(
+        'An error occurred while deleting the book',
       );
     }
   }
