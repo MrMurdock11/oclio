@@ -20,6 +20,8 @@ import {
   DeleteChapterPayload,
   GetBookPayload,
   GetBooksPayload,
+  PublishBookPayload,
+  UnpublishBookPayload,
   UpdateChapterPayload,
 } from '@oclio/clients/books-management/payloads';
 import { AccessTokenGuard, ContextUser, CurrentUser } from '@oclio/common/auth';
@@ -129,6 +131,46 @@ export class BooksController {
 
       throw new InternalServerErrorException(
         'An error occurred while deleting the book',
+      );
+    }
+  }
+
+  @Put('/:id/publish')
+  async publishBook(
+    @Param('id') bookId: string,
+    @CurrentUser() user: ContextUser,
+  ): Promise<void> {
+    try {
+      await this._booksManagementService.publishBook(
+        new PublishBookPayload(bookId, user.id.toString()),
+      );
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException(
+        'An error occurred while publish the book',
+      );
+    }
+  }
+
+  @Put('/:id/unpublish')
+  async unpublishBook(
+    @Param('id') bookId: string,
+    @CurrentUser() user: ContextUser,
+  ): Promise<void> {
+    try {
+      await this._booksManagementService.unpublishBook(
+        new UnpublishBookPayload(bookId, user.id.toString()),
+      );
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException(
+        'An error occurred while unpublish the book',
       );
     }
   }

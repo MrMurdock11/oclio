@@ -11,6 +11,8 @@ export const enum BooksManagementPattern {
   GetBooks = 'books-management.get-books',
   DeleteBook = 'books-management.delete-book',
   DeleteBooks = 'books-management.delete-books',
+  PublishBook = 'books-management.publish-book',
+  UnpublishBook = 'books-management.unpublish-book',
   CreateChapter = 'books-management.create-chapter',
   GetChapter = 'books-management.get-chapter',
   UpdateChapter = 'books.management.update-chapter',

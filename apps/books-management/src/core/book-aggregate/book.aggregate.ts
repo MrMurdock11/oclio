@@ -89,12 +89,38 @@ export class Book extends AggregateRoot<string> {
     return Result.ok(chapter);
   }
 
-  deleteChapter(chapterId: string): Result<never> {
+  deleteChapter(chapterId: string): Result<void> {
     const index = this._chapters.findIndex((ch) => ch.id === chapterId);
     if (index === -1) {
       return Result.fail(`Not found chapter by ID ${chapterId}`);
     }
     this._chapters.splice(index, 1);
+    return Result.ok();
+  }
+
+  publish(): Result<void> {
+    if (this._id === undefined) {
+      return Result.fail(ErrorMessages.Book.CannotPublishUncreatedBook);
+    }
+
+    if (this._status === BookStatus.Published) {
+      return Result.fail('Cannot publish a published book.');
+    }
+
+    this._status = BookStatus.Published;
+    return Result.ok();
+  }
+
+  unpublish(): Result<void> {
+    if (this._id === undefined) {
+      return Result.fail(ErrorMessages.Book.CannotUnpublishUncreatedBook);
+    }
+
+    if (this._status === BookStatus.Draft) {
+      return Result.fail('Cannot unpublish a draft.');
+    }
+
+    this._status = BookStatus.Draft;
     return Result.ok();
   }
 
@@ -137,13 +163,13 @@ export class Book extends AggregateRoot<string> {
 
   toPersistence<T extends Record<string, any>>(): T {
     return {
-      id: this._id,
+      // id: this._id,
       title: this._title,
       status: this._status,
       chapters: this._chapters.map((c) => c.toPresentation()),
       createdBy: this._createdBy,
-      createdAt: this._createdAt,
-      updatedAt: this._updatedAt,
+      // createdAt: this._createdAt,
+      // updatedAt: this._updatedAt,
     } as unknown as T;
   }
 }

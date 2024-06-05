@@ -15,6 +15,8 @@ import {
   DeleteChapterPayload,
   GetBookPayload,
   GetBooksPayload,
+  PublishBookPayload,
+  UnpublishBookPayload,
   UpdateChapterPayload,
 } from './payloads';
 import {
@@ -25,6 +27,8 @@ import {
   DeleteChapterResult,
   GetBookResult,
   GetBooksResult,
+  PublishBookResult,
+  UnpublishBookResult,
   UpdateChapterResult,
 } from './results';
 
@@ -84,6 +88,26 @@ export class BooksManagementService {
       this._client
         .send({ cmd: BooksManagementPattern.DeleteBooks }, payload)
         .pipe(map<any, DeleteBooksResult>(RpcResult.fromJson)),
+    );
+
+    result.getOrThrow();
+  }
+
+  async publishBook(payload: PublishBookPayload): Promise<void> {
+    const result = await firstValueFrom(
+      this._client
+        .send({ cmd: BooksManagementPattern.PublishBook }, payload)
+        .pipe(map<any, PublishBookResult>(RpcResult.fromJson)),
+    );
+
+    result.getOrThrow();
+  }
+
+  async unpublishBook(payload: UnpublishBookPayload): Promise<void> {
+    const result = await firstValueFrom(
+      this._client
+        .send({ cmd: BooksManagementPattern.UnpublishBook }, payload)
+        .pipe(map<any, UnpublishBookResult>(RpcResult.fromJson)),
     );
 
     result.getOrThrow();

@@ -13,6 +13,8 @@ import {
   DeleteBooksPayload,
   GetBookPayload,
   GetBooksPayload,
+  PublishBookPayload,
+  UnpublishBookPayload,
 } from '@oclio/clients/books-management/payloads';
 import {
   CreateBookResult,
@@ -20,6 +22,8 @@ import {
   DeleteBooksResult,
   GetBookResult,
   GetBooksResult,
+  PublishBookResult,
+  UnpublishBookResult,
 } from '@oclio/clients/books-management/results';
 import { BookDto } from '@oclio/common/dto';
 import { BooksManagementPattern } from '@oclio/common/enums';
@@ -28,6 +32,8 @@ import { RpcResult } from '@oclio/common/rpc-result';
 import { CreateBookCommand } from '../application/books/commands/create-book/create-book.command';
 import { DeleteBookCommand } from '../application/books/commands/delete-book/delete-book.command';
 import { DeleteBooksCommand } from '../application/books/commands/delete-books/delete-books.command';
+import { PublishBookCommand } from '../application/books/commands/publish-book/publish-book.command';
+import { UnpublishBookCommand } from '../application/books/commands/unpublish-book/unpublish-book.command';
 import { GetBookQuery } from '../application/books/queries/get-book/get-book.query';
 import { GetBooksQuery } from '../application/books/queries/get-books/get-books.query';
 import { Book } from '../core/book-aggregate/book.aggregate';
@@ -150,6 +156,52 @@ export class BooksController {
       }
 
       throw new RpcException('An error occurred while deleting the books');
+    }
+  }
+
+  @MessagePattern({ cmd: BooksManagementPattern.PublishBook })
+  async publishBook(payload: PublishBookPayload): Promise<PublishBookResult> {
+    const { bookId, userId } = payload;
+
+    try {
+      await this._commandBus.execute(
+        new PublishBookCommand(bookId, BigInt(userId)),
+      );
+      return RpcResult.ok(HttpStatus.OK);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        return RpcResult.fail(HttpStatus.NOT_FOUND, error.message);
+      }
+
+      if (error instanceof RpcException) {
+        return RpcResult.fail(HttpStatus.BAD_REQUEST, error.message);
+      }
+
+      throw new RpcException('An error occurred while publish the book');
+    }
+  }
+
+  @MessagePattern({ cmd: BooksManagementPattern.UnpublishBook })
+  async unpublishBook(
+    payload: UnpublishBookPayload,
+  ): Promise<UnpublishBookResult> {
+    const { bookId, userId } = payload;
+
+    try {
+      await this._commandBus.execute(
+        new UnpublishBookCommand(bookId, BigInt(userId)),
+      );
+      return RpcResult.ok(HttpStatus.OK);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        return RpcResult.fail(HttpStatus.NOT_FOUND, error.message);
+      }
+
+      if (error instanceof RpcException) {
+        return RpcResult.fail(HttpStatus.BAD_REQUEST, error.message);
+      }
+
+      throw new RpcException('An error occurred while unpublish the book');
     }
   }
 }

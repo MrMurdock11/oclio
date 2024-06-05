@@ -3,6 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
 
+import { omit } from '@oclio/common/utils';
+
 import { Book } from '../core/book-aggregate/book.aggregate';
 import { Chapter } from '../core/book-aggregate/chapter.model';
 import { Book as BookDocument } from './schema/book.schema';
@@ -36,6 +38,16 @@ export class BooksRepository {
 
   async delete(ids: string[]): Promise<void> {
     await this.bookModel.deleteMany({ _id: { $in: ids } }).exec();
+  }
+
+  async update(book: Book): Promise<void> {
+    const entity = book.toPersistence<BookDocument>();
+    await this.bookModel
+      .updateOne(
+        { _id: book.id },
+        { $set: omit(entity, ['chapters', 'createdBy']) },
+      )
+      .exec();
   }
 
   async createChapter(bookId: string, chapter: Chapter): Promise<void> {
