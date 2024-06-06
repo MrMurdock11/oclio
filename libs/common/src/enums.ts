@@ -17,6 +17,7 @@ export const enum BooksManagementPattern {
   GetChapter = 'books-management.get-chapter',
   UpdateChapter = 'books.management.update-chapter',
   DeleteChapter = 'books-management.delete-chapter',
+  RearrangeChapter = 'books-management.rearrange-chapter',
 }
 
 export const enum Microservice {

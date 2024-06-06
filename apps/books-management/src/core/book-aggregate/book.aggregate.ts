@@ -98,6 +98,17 @@ export class Book extends AggregateRoot<string> {
     return Result.ok();
   }
 
+  rearrangeChapter(from: number, to: number): Result<void> {
+    const isNegative = from < 0 || to < 0;
+    const isEmpty = from === undefined || to === undefined;
+    if (isEmpty || from === to || isNegative) {
+      return Result.fail('Invalid arguments to rearrange chapters');
+    }
+
+    this._chapters.splice(to, 0, this._chapters.splice(from, 1)[0]);
+    return Result.ok();
+  }
+
   publish(): Result<void> {
     if (this._id === undefined) {
       return Result.fail(ErrorMessages.Book.CannotPublishUncreatedBook);
@@ -166,7 +177,7 @@ export class Book extends AggregateRoot<string> {
       // id: this._id,
       title: this._title,
       status: this._status,
-      chapters: this._chapters.map((c) => c.toPresentation()),
+      chapters: this._chapters.map((c) => c.toPersistence()),
       createdBy: this._createdBy,
       // createdAt: this._createdAt,
       // updatedAt: this._updatedAt,

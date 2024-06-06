@@ -10,11 +10,13 @@ import { MessagePattern, RpcException } from '@nestjs/microservices';
 import {
   CreateChapterPayload,
   DeleteChapterPayload,
+  RearrangeChapterPayload,
   UpdateChapterPayload,
 } from '@oclio/clients/books-management/payloads';
 import {
   CreateChapterResult,
   DeleteChapterResult,
+  RearrangeChapterResult,
   UpdateChapterResult,
 } from '@oclio/clients/books-management/results';
 import { BooksManagementPattern } from '@oclio/common/enums';
@@ -22,6 +24,7 @@ import { RpcResult } from '@oclio/common/rpc-result';
 
 import { CreateChapterCommand } from '../application/chapters/commands/create-chapter/create-chapter.command';
 import { DeleteChapterCommand } from '../application/chapters/commands/delete-chapter/delete-chapter.command';
+import { RearrangeChapterCommand } from '../application/chapters/commands/rearrange-chapter/rearrange-chapter.command';
 import { UpdateChapterCommand } from '../application/chapters/commands/update-chapter/update-chapter.command';
 import { RpcResultInterceptor } from '../shared/interceptors';
 
@@ -102,6 +105,31 @@ export class ChaptersController {
       }
 
       throw new RpcException('An error occurred while deleting the chapter');
+    }
+  }
+
+  @MessagePattern({ cmd: BooksManagementPattern.RearrangeChapter })
+  async rearrange(
+    payload: RearrangeChapterPayload,
+  ): Promise<RearrangeChapterResult> {
+    const { bookId, userId, from, to } = payload;
+
+    try {
+      await this._commandBus.execute(
+        new RearrangeChapterCommand(bookId, BigInt(userId), from, to),
+      );
+
+      return RpcResult.ok(HttpStatus.OK);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        return RpcResult.fail(HttpStatus.NOT_FOUND, error.message);
+      }
+
+      if (error instanceof RpcException) {
+        return RpcResult.fail(HttpStatus.BAD_REQUEST, error.message);
+      }
+
+      throw new RpcException('An error occurred while rearranging the chapter');
     }
   }
 }

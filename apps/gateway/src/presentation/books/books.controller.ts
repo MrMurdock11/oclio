@@ -21,11 +21,13 @@ import {
   GetBookPayload,
   GetBooksPayload,
   PublishBookPayload,
+  RearrangeChapterPayload,
   UnpublishBookPayload,
   UpdateChapterPayload,
 } from '@oclio/clients/books-management/payloads';
 import { AccessTokenGuard, ContextUser, CurrentUser } from '@oclio/common/auth';
 
+import { ChapterRearrangeDto } from './dto/chapter-rearrange.dto';
 import { ChapterUpdateDto } from './dto/chapter-update.dto';
 
 @UseGuards(AccessTokenGuard)
@@ -247,6 +249,29 @@ export class BooksController {
 
       throw new InternalServerErrorException(
         'An error occurred while deleting the chapter',
+      );
+    }
+  }
+
+  @Post('/:bookId/chapters/rearrange')
+  async rearrangeChapter(
+    @Param('bookId') bookId: string,
+    @CurrentUser() user: ContextUser,
+    @Body() body: ChapterRearrangeDto,
+  ): Promise<void> {
+    const { from, to } = body;
+
+    try {
+      await this._booksManagementService.rearrangeChapter(
+        new RearrangeChapterPayload(bookId, user.id.toString(), from, to),
+      );
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException(
+        'An error occurred while rearranging the chapter',
       );
     }
   }

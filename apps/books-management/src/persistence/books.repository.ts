@@ -43,10 +43,7 @@ export class BooksRepository {
   async update(book: Book): Promise<void> {
     const entity = book.toPersistence<BookDocument>();
     await this.bookModel
-      .updateOne(
-        { _id: book.id },
-        { $set: omit(entity, ['chapters', 'createdBy']) },
-      )
+      .updateOne({ _id: book.id }, { $set: omit(entity, ['createdBy']) })
       .exec();
   }
 
