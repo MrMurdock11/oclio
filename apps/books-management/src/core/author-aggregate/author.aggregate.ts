@@ -23,7 +23,11 @@ export class Author extends AggregateRoot<bigint> {
   }
 
   addBook(title: string): Result<Book> {
-    if (!title || !this._id || this._id === 0n) {
+    if (title === undefined) {
+      title = 'Untitled';
+    }
+
+    if (this._id === undefined || this._id === 0n) {
       return Result.fail(ErrorMessages.Book.InvalidArgumentsToCreateBook);
     }
 

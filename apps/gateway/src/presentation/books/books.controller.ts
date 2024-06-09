@@ -22,11 +22,13 @@ import {
   GetBooksPayload,
   PublishBookPayload,
   RearrangeChapterPayload,
+  SaveBookDetailsPayload,
   UnpublishBookPayload,
   UpdateChapterPayload,
 } from '@oclio/clients/books-management/payloads';
 import { AccessTokenGuard, ContextUser, CurrentUser } from '@oclio/common/auth';
 
+import { BookSaveDetailsDto } from './dto/book-save-details.dto';
 import { ChapterRearrangeDto } from './dto/chapter-rearrange.dto';
 import { ChapterUpdateDto } from './dto/chapter-update.dto';
 
@@ -59,11 +61,11 @@ export class BooksController {
     }
   }
 
-  @Get('/:id')
-  async get(@Param('id') id: string, @CurrentUser() user: ContextUser) {
+  @Get('/:bookId')
+  async get(@Param('bookId') bookId: string, @CurrentUser() user: ContextUser) {
     try {
       const book = await this._booksManagementService.getBook(
-        new GetBookPayload(id, user.id.toString()),
+        new GetBookPayload(bookId, user.id.toString()),
       );
 
       return book;
@@ -97,9 +99,9 @@ export class BooksController {
     }
   }
 
-  @Delete('/:id')
+  @Delete('/:bookId')
   async deleteBook(
-    @Param('id') bookId: string,
+    @Param('bookId') bookId: string,
     @CurrentUser() user: ContextUser,
   ) {
     try {
@@ -137,9 +139,9 @@ export class BooksController {
     }
   }
 
-  @Put('/:id/publish')
+  @Put('/:bookId/publish')
   async publishBook(
-    @Param('id') bookId: string,
+    @Param('bookId') bookId: string,
     @CurrentUser() user: ContextUser,
   ): Promise<void> {
     try {
@@ -157,9 +159,9 @@ export class BooksController {
     }
   }
 
-  @Put('/:id/unpublish')
+  @Put('/:bookId/unpublish')
   async unpublishBook(
-    @Param('id') bookId: string,
+    @Param('bookId') bookId: string,
     @CurrentUser() user: ContextUser,
   ): Promise<void> {
     try {
@@ -173,6 +175,34 @@ export class BooksController {
 
       throw new InternalServerErrorException(
         'An error occurred while unpublish the book',
+      );
+    }
+  }
+
+  @Post('/:bookId/details')
+  async saveBookDetails(
+    @Param('bookId') bookId: string,
+    @Body() body: BookSaveDetailsDto,
+    @CurrentUser() user: ContextUser,
+  ): Promise<void> {
+    const { category, genrePath, volume } = body;
+    try {
+      await this._booksManagementService.saveBookDetails(
+        new SaveBookDetailsPayload(
+          bookId,
+          user.id.toString(),
+          category,
+          genrePath,
+          volume,
+        ),
+      );
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new InternalServerErrorException(
+        'An error occurred while saving the book details',
       );
     }
   }

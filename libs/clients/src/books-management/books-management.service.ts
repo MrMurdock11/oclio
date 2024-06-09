@@ -17,6 +17,7 @@ import {
   GetBooksPayload,
   PublishBookPayload,
   RearrangeChapterPayload,
+  SaveBookDetailsPayload,
   UnpublishBookPayload,
   UpdateChapterPayload,
 } from './payloads';
@@ -30,6 +31,7 @@ import {
   GetBooksResult,
   PublishBookResult,
   RearrangeChapterResult,
+  SaveBookDetailsResult,
   UnpublishBookResult,
   UpdateChapterResult,
 } from './results';
@@ -65,13 +67,11 @@ export class BooksManagementService {
   }
 
   async getAllBooks(payload: GetBooksPayload): Promise<BookDto[]> {
-    const result = await firstValueFrom(
-      this._client
-        .send({ cmd: BooksManagementPattern.GetBooks }, payload)
-        .pipe(map<any, GetBooksResult>(RpcResult.fromJson)),
+    const books = await this.send<GetBooksResult>(
+      BooksManagementPattern.SaveBookDetails,
+      payload,
     );
 
-    const books = result.getOrThrow();
     return books;
   }
 
@@ -113,6 +113,13 @@ export class BooksManagementService {
     );
 
     result.getOrThrow();
+  }
+
+  async saveBookDetails(payload: SaveBookDetailsPayload): Promise<void> {
+    await this.send<SaveBookDetailsResult>(
+      BooksManagementPattern.SaveBookDetails,
+      payload,
+    );
   }
 
   // #endregion
@@ -160,4 +167,17 @@ export class BooksManagementService {
   }
 
   // #endregion
+
+  private async send<R extends RpcResult<any> = RpcResult<void>, P = any>(
+    cmd: BooksManagementPattern,
+    payload: P,
+  ): Promise<ReturnType<R['getOrThrow']>> {
+    const result = await firstValueFrom(
+      this._client
+        .send({ cmd }, payload)
+        .pipe(map<any, R>(RpcResult.fromJson as any)),
+    );
+
+    return result.getOrThrow();
+  }
 }

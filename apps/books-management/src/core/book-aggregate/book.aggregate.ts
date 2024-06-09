@@ -1,14 +1,18 @@
 import { AggregateRoot, UNCREATED_ID } from '@oclio/common';
 import { Result } from '@oclio/common/result';
 
-import { BookStatus } from '../../shared/enums';
+import { BookStatus, Category } from '../../shared/enums';
+import { genres, validateGenrePath } from '../../shared/genres';
 import { ErrorMessages } from '../shared-kernel/error-messages';
 import { Chapter } from './chapter.model';
+import { Details } from './value-objects/details.vo';
 
 export class Book extends AggregateRoot<string> {
   private _title: string;
 
   private _chapters: Chapter[] = [];
+
+  private _details?: Details;
 
   private _status: BookStatus;
 
@@ -26,10 +30,12 @@ export class Book extends AggregateRoot<string> {
     status: BookStatus,
     createdAt?: Date,
     updatedAt?: Date,
+    details?: Details,
   ) {
     super(id);
     this._title = title;
     this._chapters = chapters;
+    this._details = details ?? Details.create();
     this._createdBy = createdBy;
     this._status = status;
     this._createdAt = createdAt;
@@ -135,6 +141,25 @@ export class Book extends AggregateRoot<string> {
     return Result.ok();
   }
 
+  saveDetails(
+    category?: Category,
+    genrePath?: string,
+    volume?: number,
+  ): Result<void> {
+    const isCategoryAndGenreNonEmpty =
+      category !== undefined && genrePath !== undefined;
+    const isInvalidGenrePath = !validateGenrePath(
+      genres[category],
+      genrePath.split('/'),
+    );
+    if (isCategoryAndGenreNonEmpty && isInvalidGenrePath) {
+      return Result.fail('Genre path is invalid.');
+    }
+
+    this._details = Details.create(category, genrePath, volume);
+    return Result.ok();
+  }
+
   static create(title: string, createdBy: bigint): Book {
     return new Book(
       UNCREATED_ID,
@@ -146,8 +171,16 @@ export class Book extends AggregateRoot<string> {
   }
 
   static toDomain<T extends Record<string, any>>(entity: T): Book {
-    const { id, title, chapters, createdBy, status, createdAt, updatedAt } =
-      entity;
+    const {
+      id,
+      title,
+      details,
+      chapters,
+      createdBy,
+      status,
+      createdAt,
+      updatedAt,
+    } = entity;
 
     return new Book(
       id,
@@ -157,6 +190,7 @@ export class Book extends AggregateRoot<string> {
       status,
       createdAt,
       updatedAt,
+      details,
     );
   }
 
@@ -165,6 +199,7 @@ export class Book extends AggregateRoot<string> {
       id: this._id,
       title: this._title,
       status: this._status,
+      details: this._details.toPresentation(),
       chapters: this._chapters.map((c) => c.toPresentation()),
       createdBy: this._createdBy.toString(),
       createdAt: this._createdAt,
@@ -174,13 +209,11 @@ export class Book extends AggregateRoot<string> {
 
   toPersistence<T extends Record<string, any>>(): T {
     return {
-      // id: this._id,
       title: this._title,
       status: this._status,
+      details: this._details.toPersistence(),
       chapters: this._chapters.map((c) => c.toPersistence()),
       createdBy: this._createdBy,
-      // createdAt: this._createdAt,
-      // updatedAt: this._updatedAt,
     } as unknown as T;
   }
 }

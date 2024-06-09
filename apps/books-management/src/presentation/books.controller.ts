@@ -14,6 +14,7 @@ import {
   GetBookPayload,
   GetBooksPayload,
   PublishBookPayload,
+  SaveBookDetailsPayload,
   UnpublishBookPayload,
 } from '@oclio/clients/books-management/payloads';
 import {
@@ -23,6 +24,7 @@ import {
   GetBookResult,
   GetBooksResult,
   PublishBookResult,
+  SaveBookDetailsResult,
   UnpublishBookResult,
 } from '@oclio/clients/books-management/results';
 import { BookDto } from '@oclio/common/dto';
@@ -33,10 +35,12 @@ import { CreateBookCommand } from '../application/books/commands/create-book/cre
 import { DeleteBookCommand } from '../application/books/commands/delete-book/delete-book.command';
 import { DeleteBooksCommand } from '../application/books/commands/delete-books/delete-books.command';
 import { PublishBookCommand } from '../application/books/commands/publish-book/publish-book.command';
+import { SaveBookDetailsCommand } from '../application/books/commands/save-book-details/save-book-details.command';
 import { UnpublishBookCommand } from '../application/books/commands/unpublish-book/unpublish-book.command';
 import { GetBookQuery } from '../application/books/queries/get-book/get-book.query';
 import { GetBooksQuery } from '../application/books/queries/get-books/get-books.query';
 import { Book } from '../core/book-aggregate/book.aggregate';
+import { Category } from '../shared/enums';
 import { RpcResultInterceptor } from '../shared/interceptors';
 
 @UseInterceptors(RpcResultInterceptor)
@@ -202,6 +206,36 @@ export class BooksController {
       }
 
       throw new RpcException('An error occurred while unpublish the book');
+    }
+  }
+
+  @MessagePattern({ cmd: BooksManagementPattern.SaveBookDetails })
+  async saveBookDetails(
+    payload: SaveBookDetailsPayload,
+  ): Promise<SaveBookDetailsResult> {
+    const { bookId, userId, category, genrePath, volume } = payload;
+
+    try {
+      await this._commandBus.execute(
+        new SaveBookDetailsCommand(
+          bookId,
+          BigInt(userId),
+          category as Category,
+          genrePath,
+          volume,
+        ),
+      );
+      return RpcResult.ok(HttpStatus.OK);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        return RpcResult.fail(HttpStatus.NOT_FOUND, error.message);
+      }
+
+      if (error instanceof RpcException) {
+        return RpcResult.fail(HttpStatus.BAD_REQUEST, error.message);
+      }
+
+      throw new RpcException('An error occurred while saving the book details');
     }
   }
 }
