@@ -3,24 +3,24 @@ import { ValueObject } from '@oclio/common';
 export class Details extends ValueObject<Details> {
   private constructor(
     private readonly _category?: string,
-    private readonly _genrePath?: string,
+    private readonly _genrePaths?: string[],
     private readonly _volume?: number,
   ) {
     super();
   }
 
-  static create(category?: string, genre?: string, volume?: number) {
-    return new Details(category, genre, volume);
+  static create(category?: string, genrePaths?: string[], volume?: number) {
+    return new Details(category, genrePaths, volume);
   }
 
   protected getEqualityComponents(): any[] {
-    return [this._category, this._genrePath, this._volume];
+    return [this._category, this._genrePaths, this._volume];
   }
 
   toPresentation<T extends Record<string, any>>(): T {
     return {
       category: this._category,
-      genrePath: this._genrePath,
+      genrePaths: this._genrePaths,
       volume: this._volume,
     } as unknown as T;
   }
@@ -28,7 +28,7 @@ export class Details extends ValueObject<Details> {
   toPersistence<T extends Record<string, any>>(): T {
     return {
       category: this._category,
-      genrePath: this._genrePath,
+      genrePaths: this._genrePaths,
       volume: this._volume,
     } as unknown as T;
   }

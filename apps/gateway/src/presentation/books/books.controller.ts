@@ -185,14 +185,14 @@ export class BooksController {
     @Body() body: BookSaveDetailsDto,
     @CurrentUser() user: ContextUser,
   ): Promise<void> {
-    const { category, genrePath, volume } = body;
+    const { category, genrePaths, volume } = body;
     try {
       await this._booksManagementService.saveBookDetails(
         new SaveBookDetailsPayload(
           bookId,
           user.id.toString(),
           category,
-          genrePath,
+          genrePaths,
           volume,
         ),
       );

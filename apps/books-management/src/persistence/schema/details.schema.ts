@@ -4,8 +4,8 @@ export class Details {
   @Prop({ type: String })
   category: string;
 
-  @Prop({ type: String })
-  genrePath: string;
+  @Prop({ type: [String] })
+  genrePaths: string[];
 
   @Prop({ type: Number })
   volume: number;

@@ -143,20 +143,19 @@ export class Book extends AggregateRoot<string> {
 
   saveDetails(
     category?: Category,
-    genrePath?: string,
+    genrePaths?: string[],
     volume?: number,
   ): Result<void> {
     const isCategoryAndGenreNonEmpty =
-      category !== undefined && genrePath !== undefined;
-    const isInvalidGenrePath = !validateGenrePath(
-      genres[category],
-      genrePath.split('/'),
+      category !== undefined && genrePaths !== undefined;
+    const isInvalidGenrePaths = !genrePaths.every((genrePath) =>
+      validateGenrePath(genres[category], genrePath.split('/')),
     );
-    if (isCategoryAndGenreNonEmpty && isInvalidGenrePath) {
+    if (isCategoryAndGenreNonEmpty && isInvalidGenrePaths) {
       return Result.fail('Genre path is invalid.');
     }
 
-    this._details = Details.create(category, genrePath, volume);
+    this._details = Details.create(category, genrePaths, volume);
     return Result.ok();
   }
 

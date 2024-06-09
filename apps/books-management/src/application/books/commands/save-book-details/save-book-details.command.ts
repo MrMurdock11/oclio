@@ -7,7 +7,7 @@ export class SaveBookDetailsCommand implements ICommand {
     public readonly bookId: string,
     public readonly userId: bigint,
     public readonly category?: Category,
-    public readonly genrePath?: string,
+    public readonly genrePaths?: string[],
     public readonly volume?: number,
   ) {}
 }

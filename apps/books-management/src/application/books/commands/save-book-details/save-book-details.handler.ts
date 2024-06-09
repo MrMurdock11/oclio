@@ -10,10 +10,10 @@ export class SaveBookDetailsHandler
   constructor(private readonly _booksRepository: BooksRepository) {}
 
   async execute(command: SaveBookDetailsCommand): Promise<any> {
-    const { bookId, userId, category, genrePath, volume } = command;
+    const { bookId, userId, category, genrePaths, volume } = command;
 
     const book = await this._booksRepository.get(bookId, userId);
-    const saveDetailsResult = book.saveDetails(category, genrePath, volume);
+    const saveDetailsResult = book.saveDetails(category, genrePaths, volume);
     saveDetailsResult.getOrThrow();
 
     await this._booksRepository.update(book);

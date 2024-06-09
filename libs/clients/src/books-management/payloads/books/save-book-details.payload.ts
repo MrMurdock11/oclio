@@ -1,5 +1,6 @@
 import { Category } from 'apps/books-management/src/shared/enums';
 import {
+  IsArray,
   IsEnum,
   IsInt,
   IsNotEmpty,
@@ -21,9 +22,10 @@ export class SaveBookDetailsPayload {
   @IsOptional()
   public readonly category?: string;
 
-  @IsString()
+  @IsArray()
+  @IsString({ each: true })
   @IsOptional()
-  public readonly genrePath?: string;
+  public readonly genrePaths?: string[];
 
   @IsInt()
   @IsOptional()
@@ -33,13 +35,13 @@ export class SaveBookDetailsPayload {
     bookId: string,
     userId: string,
     category?: string,
-    genrePath?: string,
+    genrePaths?: string[],
     volume?: number,
   ) {
     this.bookId = bookId;
     this.userId = userId;
     this.category = category;
-    this.genrePath = genrePath;
+    this.genrePaths = genrePaths;
     this.volume = volume;
   }
 }

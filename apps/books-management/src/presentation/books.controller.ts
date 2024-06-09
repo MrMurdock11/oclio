@@ -213,7 +213,7 @@ export class BooksController {
   async saveBookDetails(
     payload: SaveBookDetailsPayload,
   ): Promise<SaveBookDetailsResult> {
-    const { bookId, userId, category, genrePath, volume } = payload;
+    const { bookId, userId, category, genrePaths, volume } = payload;
 
     try {
       await this._commandBus.execute(
@@ -221,7 +221,7 @@ export class BooksController {
           bookId,
           BigInt(userId),
           category as Category,
-          genrePath,
+          genrePaths,
           volume,
         ),
       );
