@@ -5,7 +5,7 @@ interface Genre {
   subgenre?: Genre[];
 }
 
-type Genres = {
+export type Genres = {
   [key in Category]: Genre[];
 };
 

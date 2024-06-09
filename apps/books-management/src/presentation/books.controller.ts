@@ -56,7 +56,9 @@ export class BooksController {
     const { title, userId } = payload;
 
     try {
-      this._commandBus.execute(new CreateBookCommand(title, BigInt(userId)));
+      await this._commandBus.execute(
+        new CreateBookCommand(title, BigInt(userId)),
+      );
 
       return RpcResult.ok(HttpStatus.CREATED);
     } catch (error) {

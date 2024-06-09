@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 
+import { Genres } from 'apps/books-management/src/shared/genres';
 import { firstValueFrom, map } from 'rxjs';
 
 import { BookDto } from '@oclio/common/dto';
@@ -29,6 +30,7 @@ import {
   DeleteChapterResult,
   GetBookResult,
   GetBooksResult,
+  GetCategoriesAndGenresResult,
   PublishBookResult,
   RearrangeChapterResult,
   SaveBookDetailsResult,
@@ -168,13 +170,25 @@ export class BooksManagementService {
 
   // #endregion
 
+  // #region Metadata
+
+  async getCategoriesAndGenres(): Promise<Genres> {
+    const genres = await this.send<GetCategoriesAndGenresResult>(
+      BooksManagementPattern.GetCategoriesAndGenres,
+    );
+
+    return genres;
+  }
+
+  // #endregion
+
   private async send<R extends RpcResult<any> = RpcResult<void>, P = any>(
     cmd: BooksManagementPattern,
-    payload: P,
+    payload?: P,
   ): Promise<ReturnType<R['getOrThrow']>> {
     const result = await firstValueFrom(
       this._client
-        .send({ cmd }, payload)
+        .send({ cmd }, payload ?? {})
         .pipe(map<any, R>(RpcResult.fromJson as any)),
     );
 

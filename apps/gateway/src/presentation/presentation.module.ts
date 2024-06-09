@@ -8,6 +8,7 @@ import { ApplicationModule } from '../application/application.module';
 import { AuthController } from './auth/auth.controller';
 import { BooksController } from './books/books.controller';
 import { AccessTokenGuard } from './guards/access-token.guard';
+import { MetadataController } from './metadata/metadata.controller';
 import { PreferencesController } from './preferences/preferences.controller';
 import { SocialLinkTypesController } from './social-link-types/social-link-types.controller';
 import { SocialLinksController } from './social-links/social-links.controller';
@@ -23,6 +24,7 @@ import { UsersController } from './users/users.controller';
     SocialLinkTypesController,
     PreferencesController,
     BooksController,
+    MetadataController,
   ],
   providers: [JwtStrategy, AccessTokenGuard],
 })
