@@ -29,14 +29,14 @@ const Form = () => {
           Do not have an account?{" "}
           <Link
             to="/sign-up"
-            className="bg-gradient-accent rounded-md bg-clip-text text-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="rounded-md bg-gradient-accent bg-clip-text text-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             Sign Up
           </Link>
         </div>
       </div>
 
-      <div className="grid grid-cols-[1fr_min-content_1fr] items-center gap-5 text-gray-300">
+      {/* <div className="grid grid-cols-[1fr_min-content_1fr] items-center gap-5 text-gray-300">
         <hr className="h-[1px] bg-gray-300" />
         <span>or</span>
         <hr className="h-[1px] bg-gray-300" />
@@ -45,7 +45,7 @@ const Form = () => {
       <Button variant="outline" className="flex w-full">
         <Google />
         Sign In with Google
-      </Button>
+      </Button> */}
     </div>
   );
 };
