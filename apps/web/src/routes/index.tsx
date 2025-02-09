@@ -1,14 +1,12 @@
+import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import { SignIn } from "../pages/SignIn";
-import { SignUp } from "../pages/SignUp";
 
-export const router = createBrowserRouter([
-	{
-		path: "/sign-in",
-		element: <SignIn />,
-	},
-	{
-		path: "/sign-up",
-		element: <SignUp />,
-	},
+const SignIn = lazy(() => import("@/pages/auth/SignIn/SignIn"));
+const SignUp = lazy(() => import("@/pages/auth/SignUp/SignUp"));
+
+const routes = createBrowserRouter([
+  { path: "/sign-in", element: <SignIn /> },
+  { path: "/sign-up", element: <SignUp /> },
 ]);
+
+export default routes;
