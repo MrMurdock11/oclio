@@ -1,0 +1,151 @@
+{
+	"folders": [
+		{
+			"name": "✨ oclio",
+			"path": "../"
+		},
+		{
+			"name": "⚛️ @oclio/web",
+			"path": "../apps/web"
+		},
+		{
+			"name": "🖥️ @oclio/desktop",
+			"path": "../apps/desktop"
+		},
+		{
+			"name": "📦 @oclio/common",
+			"path": "../libs/common"
+		},
+		{
+			"name": "📦 @oclio/clients",
+			"path": "../libs/clients"
+		},
+		{
+			"name": "🏰 @oclio/gateway",
+			"path": "../apps/gateway"
+		},
+		{
+			"name": "🚀 @oclio/books-management",
+			"path": "../apps/books-management"
+		}
+	],
+	"settings": {
+		"editor.formatOnSave": true,
+		"[typescript]": {
+			"editor.defaultFormatter": "esbenp.prettier-vscode"
+		},
+		"[typescriptreact]": {
+			"editor.defaultFormatter": "esbenp.prettier-vscode"
+		},
+		"jest.runMode": "deferred",
+		"files.associations": {
+			"*.css": "tailwindcss"
+		},
+		"cSpell.words": [
+			"Oclio"
+		],
+		"files.exclude": {
+			"**/.git": true,
+			"**/.svn": true,
+			"**/.hg": true,
+			"**/CVS": true,
+			"**/.DS_Store": true,
+			"**/Thumbs.db": true,
+			"apps/gateway/*": true,
+			"apps/books-management/*": true,
+			"apps/desktop/*": true,
+			"apps/web/*": true,
+			"libs/common/*": true,
+		}
+	},
+	"launch": {
+		"version": "0.2.0",
+		"configurations": [
+			{
+				"name": "Debug Main Process",
+				"type": "node",
+				"request": "launch",
+				"cwd": "${workspaceRoot}",
+				"runtimeExecutable": "${workspaceRoot:🚀 @oclio/desktop}/node_modules/.bin/electron-vite",
+				"windows": {
+					"runtimeExecutable": "${workspaceRoot:🚀 @oclio/desktop}/node_modules/.bin/electron-vite.cmd"
+				},
+				"runtimeArgs": [
+					"--sourcemap"
+				],
+				"env": {
+					"REMOTE_DEBUGGING_PORT": "9222"
+				}
+			},
+			{
+				"name": "Debug Renderer Process",
+				"port": 9222,
+				"request": "attach",
+				"type": "chrome",
+				"webRoot": "${workspaceFolder:🚀 @oclio/desktop}/src/renderer",
+				"timeout": 60000,
+				"presentation": {
+					"hidden": true
+				}
+			},
+			{
+				"type": "node",
+				"request": "launch",
+				"name": "Debug Gateway",
+				"cwd": "${workspaceFolder:✨ oclio}",
+				"runtimeExecutable": "nest",
+				"runtimeArgs": [
+					"start",
+					"gateway",
+					"--debug",
+					"--watch",
+					"--",
+					"--inspect-brk"
+				],
+				"autoAttachChildProcesses": true,
+				"restart": true,
+				"sourceMaps": true,
+				"stopOnEntry": false,
+				"console": "integratedTerminal",
+			},
+			{
+				"type": "node",
+				"request": "launch",
+				"name": "Debug BooksManagement:Microservice",
+				"cwd": "${workspaceFolder:✨ oclio}",
+				"runtimeExecutable": "nest",
+				"runtimeArgs": [
+					"start",
+					"books-management",
+					"--debug",
+					"--watch",
+					"--",
+					"--inspect-brk"
+				],
+				"autoAttachChildProcesses": true,
+				"restart": true,
+				"sourceMaps": true,
+				"stopOnEntry": false,
+				"console": "integratedTerminal",
+			}
+		],
+		"compounds": [
+			{
+				"name": "Debug All",
+				"configurations": [
+					"Debug Main Process",
+					"Debug Renderer Process"
+				],
+				"presentation": {
+					"order": 1
+				}
+			}
+		]
+	},
+	"extensions": {
+		"recommendations": [
+			"dbaeumer.vscode-eslint",
+			"esbenp.prettier-vscode"
+		]
+	}
+}
