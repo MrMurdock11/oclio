@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
-import { Photo, Prisma, SocialLink, User } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 
 import { PrismaService } from '../../persistence/prisma/prisma.service';
 
@@ -8,15 +8,9 @@ import { PrismaService } from '../../persistence/prisma/prisma.service';
 export class UsersService {
   constructor(private readonly _prismaService: PrismaService) {}
 
-  async findOneById(
-    id: bigint,
-  ): Promise<(User & { photo: Photo } & { socialLinks: SocialLink[] }) | null> {
+  async findOneById(id: bigint): Promise<User | null> {
     return this._prismaService.user.findUnique({
       where: { id },
-      include: {
-        photo: true,
-        socialLinks: true,
-      },
     });
   }
 

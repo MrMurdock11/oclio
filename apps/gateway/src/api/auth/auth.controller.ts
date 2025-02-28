@@ -14,10 +14,8 @@ import { RegisterUserCommand } from '../../application/users/commands/register/r
 import { RegisterUserResult } from '../../application/users/commands/register/register-user.result';
 import { AuthenticateQuery } from '../../application/users/queries/authenticate/authenticate.query';
 import { AuthenticateResult } from '../../application/users/queries/authenticate/authenticate.result';
-
 import { AccessTokenGuard } from '../guards/access-token.guard';
-import { SignInDto } from './dtos/sign-in.dto';
-import { SignUpDto } from './dtos/sign-up.dto';
+import { SignInDto, SignUpDto } from './auth.dto';
 
 @Controller({
   path: 'auth',

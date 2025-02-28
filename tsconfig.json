@@ -24,12 +24,6 @@
       "@oclio/common/*": [
         "libs/common/src/*"
       ],
-      "@oclio/clients": [
-        "libs/clients/src"
-      ],
-      "@oclio/clients/*": [
-        "libs/clients/src/*"
-      ]
     }
   }
 }

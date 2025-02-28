@@ -1,4 +1,4 @@
-import { SocialLinkType } from '../../../common/enums';
+import { SocialLinkType } from '../../../shared/enums';
 
 export const DomainMessages = {
   User: {

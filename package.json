@@ -96,8 +96,7 @@
       "<rootDir>/libs/"
     ],
     "moduleNameMapper": {
-      "^@oclio/common(|/.*)$": "<rootDir>/libs/common/src/$1",
-      "^@oclio/clients(|/.*)$": "<rootDir>/libs/clients/src/$1"
+      "^@oclio/common(|/.*)$": "<rootDir>/libs/common/src/$1"
     }
   }
 }

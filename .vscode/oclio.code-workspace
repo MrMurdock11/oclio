@@ -17,17 +17,9 @@
 			"path": "../libs/common"
 		},
 		{
-			"name": "📦 @oclio/clients",
-			"path": "../libs/clients"
-		},
-		{
 			"name": "🏰 @oclio/gateway",
 			"path": "../apps/gateway"
 		},
-		{
-			"name": "🚀 @oclio/books-management",
-			"path": "../apps/books-management"
-		}
 	],
 	"settings": {
 		"editor.formatOnSave": true,

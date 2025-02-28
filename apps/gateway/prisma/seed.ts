@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
-import { SocialLinkType } from '../src/common/enums';
+import { SocialLinkType } from '../src/shared/enums';
 
 const prisma = new PrismaClient();
 

@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 
-import { PresentationModule } from './presentation/presentation.module';
+import { ApiModule } from './api/api.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, expandVariables: true }),
-    PresentationModule,
+    ApiModule,
   ],
 })
 export class AppModule {}
