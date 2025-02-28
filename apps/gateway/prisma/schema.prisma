@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -14,42 +8,26 @@ datasource db {
 }
 
 model User {
-  id             BigInt       @id @default(autoincrement())
-  fullName       String       @db.VarChar(95)
+  id             BigInt         @id @default(autoincrement())
+  fullName       String         @map("full_name") @db.VarChar(95)
   bio            String?
-  email          String       @unique @db.VarChar(256)
-  hashedPassword String       @db.VarChar(72)
-  photo          Photo?
-  socialLinks    SocialLink[]
-  preferences    Json         @default("{}")
+  email          String         @unique @db.VarChar(256)
+  hashedPassword String         @map("hashed_password") @db.VarChar(72)
+  preferences    Json           @default("{}")
+  subscribers    Subscription[] @relation("subscriber_subscriptions")
+  subscriptions  Subscription[] @relation("user_subscriptions")
 
   @@map("users")
 }
 
-model Photo {
-  id     BigInt  @id @default(autoincrement())
-  base64 String?
-  userId BigInt  @unique
-  user   User    @relation(fields: [userId], references: [id])
+model Subscription {
+  id           BigInt   @id @default(autoincrement())
+  userId       BigInt   @map("user_id")
+  subscriberId BigInt   @map("subscriber_id")
+  subscribeAt  DateTime @default(now()) @map("subscribe_at")
+  subscriber   User     @relation("subscriber_subscriptions", fields: [subscriberId], references: [id])
+  user         User     @relation("user_subscriptions", fields: [userId], references: [id])
 
-  @@map("photos")
-}
-
-model SocialLink {
-  id             BigInt         @id @default(autoincrement())
-  url            String
-  userId         BigInt
-  typeId         Int
-  user           User           @relation(fields: [userId], references: [id])
-  socialLinkType SocialLinkType @relation(fields: [typeId], references: [id])
-
-  @@map("social_links")
-}
-
-model SocialLinkType {
-  id         Int          @id
-  name       String       @db.VarChar(125)
-  SocialLink SocialLink[]
-
-  @@map("social_link_types")
+  @@unique([userId, subscriberId])
+  @@map("subscriptions")
 }
