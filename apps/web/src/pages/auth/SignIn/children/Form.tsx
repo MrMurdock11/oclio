@@ -1,8 +1,31 @@
 // import { Google } from "@/components/icons";
 import { Button, Checkbox, Input } from "@/components/ui";
-import { Link } from "react-router-dom";
+import { useAuth } from "@/shared/hooks/useAuth";
+import { Loader2 } from "lucide-react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Form = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const { signIn, isLoading } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignIn = async () => {
+    const result = await signIn(email, password);
+    if (result.success) {
+      navigate("/");
+    }
+  };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
   return (
     <div className="flex w-[24.125rem] flex-col gap-10">
       <div className="flex flex-col gap-3">
@@ -15,8 +38,12 @@ const Form = () => {
       </div>
 
       <div className="flex flex-col gap-4">
-        <Input placeholder="Email" />
-        <Input type="password" placeholder="Password" />
+        <Input placeholder="Email" onChange={handleEmailChange} />
+        <Input
+          type="password"
+          placeholder="Password"
+          onChange={handlePasswordChange}
+        />
       </div>
 
       <div className="flex flex-col gap-4">
@@ -24,7 +51,10 @@ const Form = () => {
           <Checkbox />
           <span className="text-gray-300">Remember me</span>
         </div>
-        <Button>Sign In</Button>
+        <Button onClick={handleSignIn} disabled={isLoading}>
+          {isLoading && <Loader2 className="animate-spin" />}
+          Sign In
+        </Button>
         <div className="self-end text-gray-300">
           Do not have an account?{" "}
           <Link
