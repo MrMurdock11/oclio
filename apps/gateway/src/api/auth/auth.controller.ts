@@ -61,8 +61,8 @@ export class AuthController {
         secure: true,
         sameSite: 'none',
       })
-      .status(HttpStatus.NO_CONTENT)
-      .send();
+      .status(HttpStatus.OK)
+      .send({ user: result.user });
   }
 
   @UseGuards(AccessTokenGuard)

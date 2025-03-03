@@ -1,18 +1,24 @@
 import { User as PrismaUser } from '@prisma/client';
-import { Expose, Transform, Type } from 'class-transformer';
+import { Expose, Transform } from 'class-transformer';
 
 import { AggregateRoot } from '@oclio/common';
 
 import { DEFAULT_USER_PREFERENCES } from '../../shared/constants';
+import { UserBasic } from '../../shared/types';
 import { Email } from './value-objects/email.vo';
 import { FullName } from './value-objects/full-name.vo';
 import { HashedPassword } from './value-objects/hashed-password.vo';
 import { Preferences } from './value-objects/preferences.vo';
+import { Username } from './value-objects/username.vo';
 
 export class User extends AggregateRoot<bigint> {
   @Expose({ name: 'email' })
   @Transform(({ value }) => value.value, { toPlainOnly: true })
   private _email: Email;
+
+  @Expose({ name: 'username' })
+  @Transform(({ value }) => value.value, { toPlainOnly: true })
+  private _username: Username;
 
   @Expose({ name: 'fullName' })
   @Transform(({ value }) => value.value, { toPlainOnly: true })
@@ -31,14 +37,17 @@ export class User extends AggregateRoot<bigint> {
 
   private constructor(
     id: bigint,
+    uid: string,
     email: Email,
+    username: Username,
     fullName: FullName,
     hashedPassword: HashedPassword,
     bio?: string,
     preferences?: Preferences,
   ) {
-    super(id);
+    super(id, uid);
     this._email = email;
+    this._username = username;
     this._fullName = fullName;
     this._hashedPassword = hashedPassword;
     this._bio = bio;
@@ -49,6 +58,10 @@ export class User extends AggregateRoot<bigint> {
 
   get email() {
     return this._email;
+  }
+
+  get username() {
+    return this._username;
   }
 
   get fullName() {
@@ -71,12 +84,15 @@ export class User extends AggregateRoot<bigint> {
 
   static create(
     email: Email,
+    username: Username,
     fullName: FullName,
     hashedPassword: HashedPassword,
   ) {
     return new User(
       undefined,
+      undefined,
       email,
+      username,
       fullName,
       hashedPassword,
       undefined,
@@ -85,16 +101,35 @@ export class User extends AggregateRoot<bigint> {
   }
 
   static fromPlain(plainObject: PrismaUser): User {
-    const { id, email, fullName, hashedPassword, bio, preferences } =
-      plainObject;
+    const {
+      id,
+      uid,
+      email,
+      username,
+      fullName,
+      hashedPassword,
+      bio,
+      preferences,
+    } = plainObject;
 
     return new User(
       id,
+      uid,
       Email.create(email),
+      Username.create(username),
       FullName.create(fullName),
       HashedPassword.create(hashedPassword),
       bio,
       Preferences.create(preferences as Record<string, string>),
     );
+  }
+
+  toBasic(): UserBasic {
+    return {
+      uid: this._uid.toString(),
+      email: this._email.value,
+      username: this._username.value,
+      fullName: this._fullName.value,
+    };
   }
 }

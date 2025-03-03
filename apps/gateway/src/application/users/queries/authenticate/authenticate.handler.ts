@@ -1,6 +1,7 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
 
+import { User } from '../../../../core/user-aggregate/user.aggregate';
 import { SecurityService } from '../../../security/security.service';
 import { UsersService } from '../../../services/users.service';
 import { AuthenticateQuery } from './authenticate.query';
@@ -36,6 +37,7 @@ export class AuthenticateHandler implements IQueryHandler<AuthenticateQuery> {
       email: userEntity.email,
       sub: userEntity.id.toString(),
     });
-    return new AuthenticateResult(token);
+    const user = User.fromPlain(userEntity);
+    return new AuthenticateResult(token, user.toBasic());
   }
 }
