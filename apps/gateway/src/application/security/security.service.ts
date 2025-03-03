@@ -1,13 +1,17 @@
 import { Injectable } from '@nestjs/common';
-import { hash, compare } from 'bcrypt';
+
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class SecurityService {
   async hashPassword(password: string): Promise<string> {
     try {
-      return await hash(password, process.env.SALT);
+      return await bcrypt.hash(
+        password,
+        Number.parseInt(process.env.SALT_ROUNDS, 10),
+      );
     } catch (err) {
-      throw new Error('Password hashing failed.');
+      throw new Error(`Password hashing failed. ${err}`);
     }
   }
 
@@ -16,7 +20,7 @@ export class SecurityService {
     hashedPassword: string,
   ): Promise<boolean> {
     try {
-      return await compare(password, hashedPassword);
+      return await bcrypt.compare(password, hashedPassword);
     } catch (err) {
       throw new Error('Password verification failed.');
     }

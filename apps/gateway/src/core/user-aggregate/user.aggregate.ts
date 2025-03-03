@@ -85,7 +85,6 @@ export class User extends AggregateRoot<bigint> {
   static create(
     email: Email,
     username: Username,
-    fullName: FullName,
     hashedPassword: HashedPassword,
   ) {
     return new User(
@@ -93,7 +92,7 @@ export class User extends AggregateRoot<bigint> {
       undefined,
       email,
       username,
-      fullName,
+      FullName.create(''),
       hashedPassword,
       undefined,
       Preferences.create(DEFAULT_USER_PREFERENCES),

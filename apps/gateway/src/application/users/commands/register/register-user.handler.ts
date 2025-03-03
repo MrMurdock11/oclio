@@ -2,13 +2,13 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { JwtService } from '@nestjs/jwt';
 
 import { Prisma } from '@prisma/client';
+import { Username } from 'apps/gateway/src/core/user-aggregate/value-objects/username.vo';
 import { instanceToPlain } from 'class-transformer';
 
 import { User } from '../../../../core/user-aggregate/user.aggregate';
 import { Email } from '../../../../core/user-aggregate/value-objects/email.vo';
 import { FullName } from '../../../../core/user-aggregate/value-objects/full-name.vo';
 import { HashedPassword } from '../../../../core/user-aggregate/value-objects/hashed-password.vo';
-
 import { SecurityService } from '../../../security/security.service';
 import { UsersService } from '../../../services/users.service';
 import { RegisterUserCommand } from './register-user.command';
@@ -25,12 +25,12 @@ export class RegisterUserHandler
   ) {}
 
   async execute(command: RegisterUserCommand): Promise<RegisterUserResult> {
-    const { email, fullName, password } = command;
+    const { email, username, password } = command;
 
     const hashedPassword = await this._securityService.hashPassword(password);
     const user = User.create(
       Email.create(email),
-      FullName.create(fullName),
+      Username.create(username),
       HashedPassword.create(hashedPassword),
     );
 

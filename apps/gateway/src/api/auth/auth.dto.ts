@@ -26,11 +26,11 @@ export class SignUpDto {
   @IsNotEmpty({ message: 'Email is required.' })
   email: string;
 
-  @Length(1, 95)
-  @IsNotEmpty({ message: 'Full name is required.' })
-  fullName: string;
+  @Length(1, 32)
+  @IsNotEmpty({ message: 'Username is required.' })
+  username: string;
 
   @IsNotEmpty({ message: 'Password is required.' })
-  @Min(8)
+  @Length(8)
   password: string;
 }

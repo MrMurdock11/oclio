@@ -29,12 +29,12 @@ export class AuthController {
 
   @Post('sign-up')
   async signUp(@Body() dto: SignUpDto, @Res() res: Response) {
-    const { email, fullName, password } = dto;
+    const { email, username, password } = dto;
 
     const result = await this._commandBus.execute<
       RegisterUserCommand,
       RegisterUserResult
-    >(new RegisterUserCommand(email, fullName, password));
+    >(new RegisterUserCommand(email, username, password));
 
     res
       .cookie('Authentication', result.token, {

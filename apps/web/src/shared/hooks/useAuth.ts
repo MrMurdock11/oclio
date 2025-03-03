@@ -52,6 +52,46 @@ export const useAuth = () => {
     }
   };
 
+  const signUp = async (email: string, username: string, password: string) => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/auth/sign-up`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, username, password }),
+          credentials: "include",
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Error when signing up");
+      }
+
+      return { success: true };
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "There was an error when signing up";
+
+      setError(errorMessage);
+      console.error("Error when signing up:", error);
+
+      return {
+        success: false,
+        error: errorMessage,
+      };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const signOut = async () => {
     try {
       setIsLoading(true);
@@ -87,6 +127,7 @@ export const useAuth = () => {
 
   return {
     signIn,
+    signUp,
     signOut,
     isLoading,
     error,

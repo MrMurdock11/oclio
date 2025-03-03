@@ -14,7 +14,7 @@ async function main() {
         email: 'stephen.king@oclio.com',
         hashedPassword:
           '$2a$12$B1/RVvEjeXFOGBP9gnRMF.rnquFD7bvQN51NdYMc2wvgTNatLBeBO',
-        preferences: { theme: 'white' },
+        preferences: { theme: 'light' },
       },
       {
         uid: uuidv4(),

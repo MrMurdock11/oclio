@@ -1,4 +1,4 @@
-import { UserBasic } from 'apps/gateway/src/types/user';
+import { UserBasic } from 'apps/gateway/src/shared/types';
 
 export class AuthenticateResult {
   constructor(

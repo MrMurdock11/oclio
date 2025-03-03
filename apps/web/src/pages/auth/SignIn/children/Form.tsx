@@ -47,10 +47,10 @@ const Form = () => {
       </div>
 
       <div className="flex flex-col gap-4">
-        <div className="flex items-center gap-2">
+        <label className="flex cursor-pointer items-center gap-2">
           <Checkbox />
           <span className="text-gray-300">Remember me</span>
-        </div>
+        </label>
         <Button onClick={handleSignIn} disabled={isLoading}>
           {isLoading && <Loader2 className="animate-spin" />}
           Sign In
