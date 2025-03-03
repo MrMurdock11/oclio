@@ -13,6 +13,10 @@ async function bootstrap() {
   app.enableVersioning({
     type: VersioningType.URI,
   });
+  app.enableCors({
+    origin: process.env.WEB_URL,
+    credentials: true,
+  });
 
   await app.listen(Number.parseInt(process.env.GATEWAY_PORT));
 }
