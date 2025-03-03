@@ -8,6 +8,7 @@
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
+    "ui:dev": "cd apps/web && npm run dev",
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
@@ -41,7 +42,8 @@
     "passport-jwt": "4.0.1",
     "react-redux": "^9.2.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^11.0.2",

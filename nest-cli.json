@@ -20,24 +20,6 @@
         "tsConfigPath": "apps/gateway/tsconfig.app.json"
       }
     },
-    "books-management": {
-      "type": "application",
-      "root": "apps/books-management",
-      "entryFile": "main",
-      "sourceRoot": "apps/books-management/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/books-management/tsconfig.app.json"
-      }
-    },
-    "user-profile": {
-      "type": "application",
-      "root": "apps/user-profile",
-      "entryFile": "main",
-      "sourceRoot": "apps/user-profile/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/user-profile/tsconfig.app.json"
-      }
-    },
     "common": {
       "type": "library",
       "root": "libs/common",
