@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpStatus,
   Post,
   Res,
@@ -10,17 +11,22 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { Response } from 'express';
 
+import { CurrentUser } from '@oclio/common/auth';
+
 import { RegisterUserCommand } from '../../application/users/commands/register/register-user.command';
 import { RegisterUserResult } from '../../application/users/commands/register/register-user.result';
 import { AuthenticateQuery } from '../../application/users/queries/authenticate/authenticate.query';
 import { AuthenticateResult } from '../../application/users/queries/authenticate/authenticate.result';
+import { UserBasic } from '../../shared/types';
 import { AccessTokenGuard } from '../guards/access-token.guard';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { SignInDto, SignUpDto } from './auth.dto';
 
 @Controller({
   path: 'auth',
   version: '1',
 })
+@UseGuards(JwtAuthGuard)
 export class AuthController {
   constructor(
     private readonly _commandBus: CommandBus,
@@ -78,5 +84,10 @@ export class AuthController {
       .json({
         message: 'Logout successful',
       });
+  }
+
+  @Get('check')
+  async check(@CurrentUser() user: UserBasic, @Res() res: Response) {
+    res.status(HttpStatus.OK).json({ isAuthenticated: user !== null, user });
   }
 }

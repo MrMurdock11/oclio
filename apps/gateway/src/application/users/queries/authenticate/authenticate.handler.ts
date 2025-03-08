@@ -35,7 +35,7 @@ export class AuthenticateHandler implements IQueryHandler<AuthenticateQuery> {
 
     const token = await this._jwtService.signAsync({
       email: userEntity.email,
-      sub: userEntity.id.toString(),
+      uid: userEntity.uid.toString(),
     });
     const user = User.fromPlain(userEntity);
     return new AuthenticateResult(token, user.toBasic());
