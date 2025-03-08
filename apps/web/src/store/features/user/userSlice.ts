@@ -16,6 +16,10 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    checkAuth: (state, action: PayloadAction<User>) => {
+      state.isAuthenticated = true;
+      state.user = action.payload;
+    },
     login: (state, action: PayloadAction<User>) => {
       state.isAuthenticated = true;
       state.user = action.payload;
@@ -27,7 +31,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { login, logout, checkAuth } = userSlice.actions;
 
 export const selectIsAuthenticated = (state: RootState) =>
   state.user.isAuthenticated;

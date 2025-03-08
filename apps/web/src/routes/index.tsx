@@ -8,8 +8,9 @@ const SignUp = lazy(() => import("@/pages/auth/SignUp/SignUp"));
 const routes = createBrowserRouter([
   {
     element: <ProtectedRoute redirectPath="/sign-in" />,
-    children: [{ path: "/", element: <p>Home</p> }],
+    children: [{ path: "/profile", element: <p>Profile</p> }],
   },
+  { path: "/", element: <p>Home</p> },
   { path: "/sign-in", element: <SignIn /> },
   { path: "/sign-up", element: <SignUp /> },
   { path: "*", element: <p>There's nothing here: 404!</p> },

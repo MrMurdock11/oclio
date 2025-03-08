@@ -1,12 +1,11 @@
-import router from "@/routes";
-import { RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
 import { store } from "@/store";
+import AuthLoader from "./components/AuthLoader";
 
 function App() {
   return (
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <AuthLoader />
     </Provider>
   );
 }

@@ -12,3 +12,7 @@ export type ResponseError = {
 export type SignInResponse = {
   user: UserBasic;
 } & ResponseError;
+
+export type CheckAuthResponse = {
+  user: UserBasic;
+} & ResponseError;
