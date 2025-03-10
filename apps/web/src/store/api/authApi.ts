@@ -13,7 +13,7 @@ export const authApi = createApi({
     }),
     signOut: builder.mutation<void, void>({
       query: () => ({
-        url: "auth/logout",
+        url: "auth/sign-out",
         method: "POST",
       }),
     }),
