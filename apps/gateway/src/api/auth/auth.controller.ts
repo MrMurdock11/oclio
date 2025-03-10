@@ -71,10 +71,8 @@ export class AuthController {
       .send({ user: result.user });
   }
 
-  @UseGuards(AccessTokenGuard)
-  @Post('logout')
-  async logout(@Res() res: Response) {
-    // Set the cookie's expiration date to a past time to invalidate it
+  @Post('sign-out')
+  async signOut(@Res() res: Response) {
     res
       .cookie('Authentication', '', {
         httpOnly: true,
