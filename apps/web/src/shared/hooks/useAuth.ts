@@ -1,8 +1,7 @@
 import { useDispatch } from "react-redux";
 import { login, logout } from "@/store/features/user/userSlice";
 import { useState } from "react";
-import { CheckAuthResponse, SignInResponse } from "../api.types";
-import { checkAuth as checkAuthAction } from "@/store/features/user/userSlice";
+import { SignInResponse } from "../api.types";
 
 export const useAuth = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -122,20 +121,6 @@ export const useAuth = () => {
     }
   };
 
-  const checkAuth = async () => {
-    const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/check`, {
-      credentials: "include",
-    });
-
-    if (!response.ok) {
-      throw new Error("Error when checking authentication");
-    }
-
-    const data = (await response.json()) as CheckAuthResponse;
-
-    dispatch(checkAuthAction(data.user));
-  };
-
   const clearError = () => {
     setError(null);
   };
@@ -144,7 +129,6 @@ export const useAuth = () => {
     signIn,
     signUp,
     signOut,
-    checkAuth,
     isLoading,
     error,
     clearError,

@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "@/store";
 import { User } from "@/shared/types";
+import { authApi } from "@/store/api/authApi";
 
 interface UserState {
   isAuthenticated: boolean;
@@ -16,10 +17,6 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    checkAuth: (state, action: PayloadAction<User>) => {
-      state.isAuthenticated = true;
-      state.user = action.payload;
-    },
     login: (state, action: PayloadAction<User>) => {
       state.isAuthenticated = true;
       state.user = action.payload;
@@ -29,11 +26,19 @@ export const userSlice = createSlice({
       state.user = null;
     },
   },
+  extraReducers: (builder) => {
+    builder.addMatcher(
+      authApi.endpoints.checkAuth.matchFulfilled,
+      (state, { payload }) => {
+        state.isAuthenticated = payload.isAuthenticated;
+        state.user = payload.user || null;
+      },
+    );
+  },
 });
 
-export const { login, logout, checkAuth } = userSlice.actions;
+export const { login, logout } = userSlice.actions;
 
-export const selectIsAuthenticated = (state: RootState) =>
-  state.user.isAuthenticated;
+export const selectUser = (state: RootState) => state.user;
 
 export default userSlice.reducer;

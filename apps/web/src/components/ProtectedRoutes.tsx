@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate, Outlet, To } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import { selectIsAuthenticated } from "@/store/features/user/userSlice";
+import { selectUser } from "@/store/features/user/userSlice";
 
 interface ProtectedRouteProps {
   redirectPath?: To;
@@ -13,7 +13,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   redirectPath = "/sign-in",
   children,
 }) => {
-  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const { isAuthenticated } = useSelector(selectUser);
 
   if (!isAuthenticated) {
     return <Navigate to={redirectPath} replace />;
