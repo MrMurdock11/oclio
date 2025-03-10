@@ -1,12 +1,27 @@
-import { BookOpenText, CirclePlus } from "lucide-react";
+import { BookOpenText, CirclePlus, LogOut } from "lucide-react";
 import { CircleUserRound } from "lucide-react";
-import { Avatar, AvatarFallback, AvatarImage, Button } from "./ui";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Button,
+  DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "./ui";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { selectUser } from "@/store/features/user/userSlice";
+import { useSignOutMutation } from "@/store/api/authApi";
 
 const Header = () => {
   const { isAuthenticated } = useSelector(selectUser);
+  const [signOut] = useSignOutMutation();
+
+  const handleSignOut = async () => {
+    await signOut();
+  };
 
   return (
     <header className="flex h-14 w-full items-center justify-between px-4">
@@ -23,10 +38,22 @@ const Header = () => {
             </Button>
 
             <Button variant="ghost" size="icon">
-              <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Avatar>
+                    <AvatarImage src="https://github.com/shadcn.png" />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem>
+                    <Button variant="ghost" onClick={handleSignOut}>
+                      <LogOut />
+                      Sign Out
+                    </Button>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </Button>
           </div>
         )}

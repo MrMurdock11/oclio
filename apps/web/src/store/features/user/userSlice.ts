@@ -34,6 +34,10 @@ export const userSlice = createSlice({
         state.user = payload.user || null;
       },
     );
+    builder.addMatcher(authApi.endpoints.signOut.matchFulfilled, (state) => {
+      state.isAuthenticated = false;
+      state.user = null;
+    });
   },
 });
 
