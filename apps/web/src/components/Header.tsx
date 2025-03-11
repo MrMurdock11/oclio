@@ -15,6 +15,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { selectUser } from "@/store/features/user/userSlice";
 import { useSignOutMutation } from "@/store/api/authApi";
+import { toast } from "sonner";
 
 const Header = () => {
   const { isAuthenticated } = useSelector(selectUser);
@@ -22,6 +23,10 @@ const Header = () => {
 
   const handleSignOut = async () => {
     await signOut();
+  };
+
+  const handleCreate = () => {
+    toast.warning("Working on it...");
   };
 
   return (
@@ -33,7 +38,7 @@ const Header = () => {
       <div className="flex h-full items-center justify-center">
         {isAuthenticated && (
           <div className="flex items-center gap-2">
-            <Button variant="outline">
+            <Button variant="outline" onClick={handleCreate}>
               <CirclePlus />
               Create
             </Button>
