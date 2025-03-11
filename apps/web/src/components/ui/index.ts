@@ -9,4 +9,5 @@ export * from "./Sheet";
 export * from "./Tooltip";
 export * from "./Avatar";
 export * from "./DropdownMenu";
+export * from "./Menubar";
 export { Checkbox, Input, Separator, Skeleton, Toaster };

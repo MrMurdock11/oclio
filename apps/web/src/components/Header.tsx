@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import { selectUser } from "@/store/features/user/userSlice";
 import { useSignOutMutation } from "@/store/api/authApi";
 import { toast } from "sonner";
+import { ModeToggle } from "./ModeToggle";
 
 const Header = () => {
   const { isAuthenticated } = useSelector(selectUser);
@@ -45,6 +46,10 @@ const Header = () => {
 
             <Separator orientation="vertical" className="h-5 bg-[#d0d0d0]" />
 
+            <ModeToggle />
+
+            <Separator orientation="vertical" className="h-5 bg-[#d0d0d0]" />
+
             <Button variant="ghost" size="icon">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -54,11 +59,9 @@ const Header = () => {
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem>
-                    <Button variant="ghost" onClick={handleSignOut}>
-                      <LogOut />
-                      Sign Out
-                    </Button>
+                  <DropdownMenuItem onClick={handleSignOut}>
+                    <LogOut />
+                    Sign Out
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
