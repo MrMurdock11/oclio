@@ -9,6 +9,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  Separator,
 } from "./ui";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -29,13 +30,15 @@ const Header = () => {
         <BookOpenText />
       </Button>
 
-      <div className="flex items-center justify-center">
+      <div className="flex h-full items-center justify-center">
         {isAuthenticated && (
           <div className="flex items-center gap-2">
             <Button variant="outline">
               <CirclePlus />
               Create
             </Button>
+
+            <Separator orientation="vertical" className="h-5 bg-[#d0d0d0]" />
 
             <Button variant="ghost" size="icon">
               <DropdownMenu>
