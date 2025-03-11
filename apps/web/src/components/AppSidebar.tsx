@@ -9,6 +9,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/Sidebar";
 import { House } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const navItems = [
   {
@@ -34,12 +35,14 @@ const AppSidebar = () => {
         <SidebarGroup>
           <SidebarMenu>
             {navItems.map((item) => (
-              <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton>
-                  <item.icon />
-                  {item.title}
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              <Link to={item.href} key={item.title}>
+                <SidebarMenuItem>
+                  <SidebarMenuButton>
+                    <item.icon />
+                    {item.title}
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              </Link>
             ))}
           </SidebarMenu>
         </SidebarGroup>
