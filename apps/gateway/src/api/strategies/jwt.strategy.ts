@@ -16,13 +16,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
           return request?.cookies?.Authentication;
         },
       ]),
-      // passReqToCallback: true,
       ignoreExpiration: false,
       secretOrKey: process.env.TOKEN_KEY,
     });
   }
 
   async validate(payload: JwtPayload): Promise<ContextUser> {
-    return { id: BigInt(payload.sub), email: payload.email };
+    return { uid: payload.uid, email: payload.email };
   }
 }

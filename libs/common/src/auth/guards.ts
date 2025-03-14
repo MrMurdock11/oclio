@@ -19,6 +19,7 @@ export class AccessTokenGuard extends AuthGuard('jwt') {
       ANONYMOUS_ACCESS,
       [context.getHandler(), context.getClass()],
     );
+
     if (hasAnonymousAccess) {
       return true;
     }

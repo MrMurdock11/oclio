@@ -1,5 +1,5 @@
 export interface ContextUser {
-  id: bigint;
+  uid: string;
   email: string;
 }
 

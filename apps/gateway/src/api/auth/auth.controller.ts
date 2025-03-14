@@ -13,12 +13,12 @@ import { Response } from 'express';
 
 import { CurrentUser } from '@oclio/common/auth';
 
+import { UsersService } from '../../application/services/users.service';
 import { RegisterUserCommand } from '../../application/users/commands/register/register-user.command';
 import { RegisterUserResult } from '../../application/users/commands/register/register-user.result';
 import { AuthenticateQuery } from '../../application/users/queries/authenticate/authenticate.query';
 import { AuthenticateResult } from '../../application/users/queries/authenticate/authenticate.result';
 import { UserBasic } from '../../shared/types';
-import { AccessTokenGuard } from '../guards/access-token.guard';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { SignInDto, SignUpDto } from './auth.dto';
 
@@ -31,6 +31,7 @@ export class AuthController {
   constructor(
     private readonly _commandBus: CommandBus,
     private readonly _queryBus: QueryBus,
+    private readonly _usersService: UsersService,
   ) {}
 
   @Post('sign-up')
@@ -85,7 +86,17 @@ export class AuthController {
   }
 
   @Get('check')
-  async check(@CurrentUser() user: UserBasic, @Res() res: Response) {
-    res.status(HttpStatus.OK).json({ isAuthenticated: user !== null, user });
+  async check(@CurrentUser() user: UserBasic | null, @Res() res: Response) {
+    if (!user) {
+      return res
+        .status(HttpStatus.OK)
+        .json({ isAuthenticated: false, user: null });
+    }
+
+    const userBasic = await this._usersService.findOneByUid(user.uid);
+
+    res
+      .status(HttpStatus.OK)
+      .json({ isAuthenticated: !!userBasic, user: userBasic });
   }
 }

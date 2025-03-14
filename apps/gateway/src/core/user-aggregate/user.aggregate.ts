@@ -4,7 +4,7 @@ import { Expose, Transform } from 'class-transformer';
 import { AggregateRoot } from '@oclio/common';
 
 import { DEFAULT_USER_PREFERENCES } from '../../shared/constants';
-import { UserBasic } from '../../shared/types';
+import { UserBasic, UserPreferences } from '../../shared/types';
 import { Email } from './value-objects/email.vo';
 import { FullName } from './value-objects/full-name.vo';
 import { HashedPassword } from './value-objects/hashed-password.vo';
@@ -129,6 +129,7 @@ export class User extends AggregateRoot<bigint> {
       email: this._email.value,
       username: this._username.value,
       fullName: this._fullName.value,
+      preferences: this._preferences.value as UserPreferences,
     };
   }
 }

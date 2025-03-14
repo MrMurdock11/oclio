@@ -1,10 +1,8 @@
 import {
   ExecutionContext,
   SetMetadata,
-  UnauthorizedException,
   createParamDecorator,
 } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
 
 import { ANONYMOUS_ACCESS } from '../constants';
 
@@ -14,19 +12,11 @@ export const CurrentUser = createParamDecorator(
     ctx: ExecutionContext,
   ) => {
     const request = ctx.switchToHttp().getRequest();
-    const token = request.cookies?.Authentication;
-
-    if (!token) {
-      return null;
-    }
-
-    const jwtService = request.jwtService as JwtService;
 
     try {
-      const decoded = jwtService.verify<{ email: string; uid: string }>(token);
-      return data ? decoded[data] : decoded;
+      return request.user;
     } catch (error) {
-      throw new UnauthorizedException('Invalid or expired token');
+      return null;
     }
   },
 );

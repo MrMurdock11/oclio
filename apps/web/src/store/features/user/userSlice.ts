@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "@/store";
 import { User } from "@/shared/types";
 import { authApi } from "@/store/api/authApi";
+import { usersApi } from "@/store/api/usersApi";
 
 interface UserState {
   isAuthenticated: boolean;
@@ -38,6 +39,14 @@ export const userSlice = createSlice({
       state.isAuthenticated = false;
       state.user = null;
     });
+    builder.addMatcher(
+      usersApi.endpoints.updatePreferences.matchFulfilled,
+      (state, { payload }) => {
+        if (state.user) {
+          state.user.preferences = payload;
+        }
+      },
+    );
   },
 });
 

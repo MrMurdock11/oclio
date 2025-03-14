@@ -2,17 +2,17 @@ import { FC, useEffect } from "react";
 import { useCheckAuthQuery } from "@/store/api/authApi";
 import router from "@/routes";
 import { RouterProvider } from "react-router-dom";
+import { useTheme } from "@/hooks/use-theme";
 
 const AuthLoader: FC = () => {
   const { data, isLoading } = useCheckAuthQuery();
+  const { setTheme } = useTheme();
 
   useEffect(() => {
     if (data && data.isAuthenticated) {
-      console.log("User is authenticated:", data.user);
-    } else {
-      console.log("User is not authenticated");
+      setTheme(data.user?.preferences.theme as "dark" | "light");
     }
-  }, [data]);
+  }, [data, setTheme]);
 
   if (isLoading) return <div>Loading...</div>;
 

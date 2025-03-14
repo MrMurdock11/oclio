@@ -3,4 +3,9 @@ export type User = {
   email: string;
   username: string;
   fullName: string;
+  preferences: UserPreferences;
+};
+
+export type UserPreferences = {
+  theme: "light" | "dark" | "system";
 };
