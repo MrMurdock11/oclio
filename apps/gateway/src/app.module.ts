@@ -5,7 +5,11 @@ import { ApiModule } from './api/api.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, expandVariables: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      expandVariables: true,
+      envFilePath: ['.env'],
+    }),
     ApiModule,
   ],
 })

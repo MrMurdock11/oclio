@@ -5,15 +5,15 @@
 			"path": "../"
 		},
 		{
-			"name": "⚛️ @oclio/web",
+			"name": "⚛️ @web",
 			"path": "../apps/web"
 		},
 		{
-			"name": "📦 @oclio/common",
+			"name": "📦 @common",
 			"path": "../libs/common"
 		},
 		{
-			"name": "🏰 @oclio/gateway",
+			"name": "🏰 @gateway",
 			"path": "../apps/gateway"
 		},
 	],

@@ -5,11 +5,11 @@ import { ThemeProvider } from "./components/ThemeProvider";
 
 function App() {
   return (
-    <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
-      <Provider store={store}>
+    <Provider store={store}>
+      <ThemeProvider>
         <AuthLoader />
-      </Provider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </Provider>
   );
 }
 

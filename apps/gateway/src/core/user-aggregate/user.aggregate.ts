@@ -1,7 +1,6 @@
+import { AggregateRoot } from '@common/primitives/aggregate-root';
 import { User as PrismaUser } from '@prisma/client';
 import { Expose, Transform } from 'class-transformer';
-
-import { AggregateRoot } from '@oclio/common';
 
 import { DEFAULT_USER_PREFERENCES } from '../../shared/constants';
 import { UserBasic, UserPreferences } from '../../shared/types';

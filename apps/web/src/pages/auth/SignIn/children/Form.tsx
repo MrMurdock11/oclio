@@ -1,19 +1,19 @@
 // import { Google } from "@/components/icons";
 import { Button, Checkbox, Input } from "@/components/ui";
-import { useAuth } from "@/shared/hooks/useAuth";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useLoginMutation } from "@/store/api/authApi";
 
 const Form = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { signIn, isLoading } = useAuth();
   const navigate = useNavigate();
+  const [login, { isLoading }] = useLoginMutation();
 
   const handleSignIn = async () => {
-    const result = await signIn(email, password);
-    if (result.success) {
+    const result = await login({ email, password }).unwrap();
+    if (result.user) {
       navigate("/");
     }
   };

@@ -2,101 +2,54 @@ import {
   Body,
   Controller,
   Get,
+  HttpCode,
   HttpStatus,
   Post,
   Res,
   UseGuards,
 } from '@nestjs/common';
-import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
+import { CurrentUser } from '@common/auth';
+import { JwtAuthGuard } from '@gateway/api/guards/jwt-auth.guard';
+import { AuthService } from '@gateway/application/services/auth.service';
+import { UserBasic } from '@gateway/shared/types';
 import { Response } from 'express';
 
-import { CurrentUser } from '@oclio/common/auth';
-
-import { UsersService } from '../../application/services/users.service';
-import { RegisterUserCommand } from '../../application/users/commands/register/register-user.command';
-import { RegisterUserResult } from '../../application/users/commands/register/register-user.result';
-import { AuthenticateQuery } from '../../application/users/queries/authenticate/authenticate.query';
-import { AuthenticateResult } from '../../application/users/queries/authenticate/authenticate.result';
-import { UserBasic } from '../../shared/types';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { SignInDto, SignUpDto } from './auth.dto';
 
 @Controller({
   path: 'auth',
   version: '1',
 })
-@UseGuards(JwtAuthGuard)
 export class AuthController {
-  constructor(
-    private readonly _commandBus: CommandBus,
-    private readonly _queryBus: QueryBus,
-    private readonly _usersService: UsersService,
-  ) {}
+  constructor(private readonly authService: AuthService) {}
 
-  @Post('sign-up')
-  async signUp(@Body() dto: SignUpDto, @Res() res: Response) {
-    const { email, username, password } = dto;
-
-    const result = await this._commandBus.execute<
-      RegisterUserCommand,
-      RegisterUserResult
-    >(new RegisterUserCommand(email, username, password));
-
-    res
-      .cookie('Authentication', result.token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none',
-      })
-      .status(HttpStatus.CREATED)
-      .send('You signed up successfully.');
+  @Post('register')
+  @HttpCode(HttpStatus.CREATED)
+  async register(@Body() dto: SignUpDto) {
+    return this.authService.register(dto);
   }
 
-  @Post('sign-in')
-  async signIn(@Body() dto: SignInDto, @Res() res: Response) {
-    const { email, password } = dto;
+  @Post('login')
+  @HttpCode(HttpStatus.OK)
+  async login(
+    @Body() dto: SignInDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const result = await this.authService.login(dto, res);
 
-    const result = await this._queryBus.execute<
-      AuthenticateQuery,
-      AuthenticateResult
-    >(new AuthenticateQuery(email, password));
-
-    res
-      .cookie('Authentication', result.token, {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'none',
-      })
-      .status(HttpStatus.OK)
-      .send({ user: result.user });
+    return result;
   }
 
-  @Post('sign-out')
-  async signOut(@Res() res: Response) {
-    res
-      .cookie('Authentication', '', {
-        httpOnly: true,
-        expires: new Date(0),
-      })
-      .status(HttpStatus.OK)
-      .json({
-        message: 'Logout successful',
-      });
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  async logout(@Res({ passthrough: true }) res: Response) {
+    return this.authService.logout(res);
   }
 
-  @Get('check')
-  async check(@CurrentUser() user: UserBasic | null, @Res() res: Response) {
-    if (!user) {
-      return res
-        .status(HttpStatus.OK)
-        .json({ isAuthenticated: false, user: null });
-    }
-
-    const userBasic = await this._usersService.findOneByUid(user.uid);
-
-    res
-      .status(HttpStatus.OK)
-      .json({ isAuthenticated: !!userBasic, user: userBasic });
+  @UseGuards(JwtAuthGuard)
+  @Get('me')
+  async getProfile(@CurrentUser() user: UserBasic | null) {
+    return this.authService.getProfile(user);
   }
 }

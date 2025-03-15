@@ -1,6 +1,6 @@
 import { Body, Controller, Patch, UseGuards } from '@nestjs/common';
 
-import { AccessTokenGuard, CurrentUser } from '@oclio/common/auth';
+import { AccessTokenGuard, CurrentUser } from '@common/auth';
 
 import { UsersService } from '../../application/services/users.service';
 import { UserBasic, UserPreferences } from '../../shared/types';

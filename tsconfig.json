@@ -18,12 +18,12 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@oclio/common": [
-        "libs/common/src"
-      ],
-      "@oclio/common/*": [
+      "@common/*": [
         "libs/common/src/*"
       ],
+      "@gateway/*": [
+        "apps/gateway/src/*"
+      ]
     }
   }
 }

@@ -1,11 +1,18 @@
-import { createContext, useCallback, useEffect, useState } from "react";
+import { selectTheme } from "@/store/features/user/userSlice";
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { useSelector } from "react-redux";
 
 type Theme = "dark" | "light" | "system";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
   defaultTheme?: Theme;
-  storageKey?: string;
 };
 
 type ThemeProviderState = {
@@ -23,47 +30,56 @@ export const ThemeProviderContext =
 
 export function ThemeProvider({
   children,
-  defaultTheme = "system",
-  storageKey = "vite-ui-theme",
-  ...props
+  defaultTheme = "light",
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme,
-  );
+  const appTheme = useSelector(selectTheme) || defaultTheme;
+  const [theme, setTheme] = useState<Theme>(appTheme);
 
   useEffect(() => {
-    const root = window.document.documentElement;
-
+    const root = document.documentElement;
     root.classList.remove("light", "dark");
 
-    if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-        .matches
-        ? "dark"
-        : "light";
+    let appliedTheme = theme;
 
-      root.classList.add(systemTheme);
-      return;
+    if (theme === "system") {
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)",
+      ).matches;
+      appliedTheme = prefersDark ? "dark" : "light";
     }
 
-    root.classList.add(theme);
+    root.classList.add(appliedTheme);
   }, [theme]);
 
-  const handleThemeChange = useCallback(
-    (theme: Theme) => {
-      localStorage.setItem(storageKey, theme);
-      setTheme(theme);
-    },
-    [storageKey, setTheme],
+  useEffect(() => {
+    setTheme(appTheme);
+  }, [appTheme]);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const handleSystemThemeChange = (e: MediaQueryListEvent) => {
+      if (theme === "system") {
+        setTheme(e.matches ? "dark" : "light");
+      }
+    };
+
+    mediaQuery.addEventListener("change", handleSystemThemeChange);
+    return () =>
+      mediaQuery.removeEventListener("change", handleSystemThemeChange);
+  }, [theme]);
+
+  const handleThemeChange = useCallback((newTheme: Theme) => {
+    setTheme(newTheme);
+  }, []);
+
+  const contextValue = useMemo(
+    () => ({ theme, setTheme: handleThemeChange }),
+    [theme, handleThemeChange],
   );
 
-  const value = {
-    theme,
-    setTheme: handleThemeChange,
-  };
-
   return (
-    <ThemeProviderContext.Provider {...props} value={value}>
+    <ThemeProviderContext.Provider value={contextValue}>
       {children}
     </ThemeProviderContext.Provider>
   );

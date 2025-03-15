@@ -8,16 +8,12 @@ import { ANONYMOUS_ACCESS } from '../constants';
 
 export const CurrentUser = createParamDecorator(
   async (
-    data: keyof { email: string; uid: string } | undefined,
+    data: keyof { email: string; uid: string } | null,
     ctx: ExecutionContext,
   ) => {
     const request = ctx.switchToHttp().getRequest();
-
-    try {
-      return request.user;
-    } catch (error) {
-      return null;
-    }
+    console.log('request.user', request.user);
+    return request.user;
   },
 );
 

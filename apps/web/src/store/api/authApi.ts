@@ -8,16 +8,27 @@ export const authApi = createApi({
     credentials: "include",
   }),
   endpoints: (builder) => ({
-    checkAuth: builder.query<{ isAuthenticated: boolean; user?: User }, void>({
-      query: () => "auth/check",
+    login: builder.mutation<
+      { user?: User },
+      { email: string; password: string }
+    >({
+      query: (body) => ({
+        url: "auth/login",
+        method: "POST",
+        body,
+      }),
     }),
-    signOut: builder.mutation<void, void>({
+    logout: builder.mutation<void, void>({
       query: () => ({
-        url: "auth/sign-out",
+        url: "auth/logout",
         method: "POST",
       }),
+    }),
+    checkAuth: builder.query<{ isAuthenticated: boolean; user?: User }, void>({
+      query: () => "auth/me",
     }),
   }),
 });
 
-export const { useCheckAuthQuery, useSignOutMutation } = authApi;
+export const { useLoginMutation, useLogoutMutation, useCheckAuthQuery } =
+  authApi;

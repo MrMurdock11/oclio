@@ -29,13 +29,20 @@ export const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(
+      authApi.endpoints.login.matchFulfilled,
+      (state, { payload }) => {
+        state.isAuthenticated = true;
+        state.user = payload.user || null;
+      },
+    );
+    builder.addMatcher(
       authApi.endpoints.checkAuth.matchFulfilled,
       (state, { payload }) => {
         state.isAuthenticated = payload.isAuthenticated;
         state.user = payload.user || null;
       },
     );
-    builder.addMatcher(authApi.endpoints.signOut.matchFulfilled, (state) => {
+    builder.addMatcher(authApi.endpoints.logout.matchFulfilled, (state) => {
       state.isAuthenticated = false;
       state.user = null;
     });
@@ -53,5 +60,8 @@ export const userSlice = createSlice({
 export const { login, logout } = userSlice.actions;
 
 export const selectUser = (state: RootState) => state.user;
+
+export const selectTheme = (state: RootState) =>
+  state.user.user?.preferences.theme;
 
 export default userSlice.reducer;

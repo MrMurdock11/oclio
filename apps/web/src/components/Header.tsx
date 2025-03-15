@@ -14,16 +14,16 @@ import {
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { selectUser } from "@/store/features/user/userSlice";
-import { useSignOutMutation } from "@/store/api/authApi";
+import { useLogoutMutation } from "@/store/api/authApi";
 import { toast } from "sonner";
 import { ModeToggle } from "./ModeToggle";
 
 const Header = () => {
   const { isAuthenticated } = useSelector(selectUser);
-  const [signOut] = useSignOutMutation();
+  const [logout] = useLogoutMutation();
 
   const handleSignOut = async () => {
-    await signOut();
+    await logout();
   };
 
   const handleCreate = () => {
