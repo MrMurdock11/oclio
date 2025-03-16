@@ -1,26 +1,27 @@
-import {
-  FloatingMenu,
-  BubbleMenu,
-  useEditor,
-  EditorContent,
-} from "@tiptap/react";
+import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 
 const extensions = [StarterKit];
 
-const content = "<p>Hello World!</p>";
+type EditorProps = {
+  content?: string;
+  className?: string;
+};
 
-const Editor = () => {
+const Editor = ({ content = "", className = "" }: EditorProps) => {
   const editor = useEditor({
     extensions,
     content,
+    editorProps: {
+      attributes: {
+        class: "outline-none",
+      },
+    },
   });
 
   return (
     <>
-      <EditorContent editor={editor} />
-      <FloatingMenu editor={editor}>This is the floating menu</FloatingMenu>
-      <BubbleMenu editor={editor}>This is the bubble menu</BubbleMenu>
+      <EditorContent className={className} editor={editor} />
     </>
   );
 };
