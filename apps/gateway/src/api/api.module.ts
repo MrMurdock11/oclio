@@ -6,6 +6,7 @@ import { ApplicationModule } from '@gateway/application/application.module';
 
 import { ServicesModule } from '../application/services/services.module';
 import { AuthController } from './auth/auth.controller';
+import BooksController from './books/books.controller';
 import { AccessTokenGuard } from './guards/access-token.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { JwtStrategy } from './strategies/jwt.strategy';
@@ -13,7 +14,7 @@ import { UsersController } from './users/users.controller';
 
 @Module({
   imports: [ApplicationModule, PassportModule, JwtConfigModule, ServicesModule],
-  controllers: [UsersController, AuthController],
+  controllers: [UsersController, AuthController, BooksController],
   providers: [JwtStrategy, AccessTokenGuard, JwtAuthGuard],
 })
 export class ApiModule {}

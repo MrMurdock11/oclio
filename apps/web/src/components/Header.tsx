@@ -17,17 +17,27 @@ import { selectUser } from "@/store/features/user/userSlice";
 import { useLogoutMutation } from "@/store/api/authApi";
 import { toast } from "sonner";
 import { ModeToggle } from "./ModeToggle";
+import { useCreateBookMutation } from "@/store/api/booksApi";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const { isAuthenticated } = useSelector(selectUser);
   const [logout] = useLogoutMutation();
+  const [createBook, { error }] = useCreateBookMutation();
+  const navigate = useNavigate();
 
   const handleSignOut = async () => {
     await logout();
   };
 
-  const handleCreate = () => {
-    toast.warning("Working on it...");
+  const handleCreate = async () => {
+    const { uid: bookUid } = await createBook().unwrap();
+
+    if (error) {
+      toast.error("Failed to create book");
+    }
+
+    navigate(`/studio/books/${bookUid}`);
   };
 
   return (
