@@ -54,6 +54,17 @@ class BooksController {
       body.description,
     );
   }
+
+  @Get(':uid/access')
+  @HttpCode(HttpStatus.OK)
+  async checkBookAccess(
+    @CurrentUser() user: UserBasic,
+    @Param('uid') uid: string,
+  ): Promise<{ hasAccess: boolean }> {
+    return {
+      hasAccess: await this._booksService.checkBookAccess(user.uid, uid),
+    };
+  }
 }
 
 export default BooksController;

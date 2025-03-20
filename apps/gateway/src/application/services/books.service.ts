@@ -94,6 +94,14 @@ class BooksService {
       data: { description: book.description },
     });
   }
+
+  async checkBookAccess(userUid: string, uid: string): Promise<boolean> {
+    const bookEntity = await this._prismaService.book.findUnique({
+      where: { uid, authorUid: userUid },
+    });
+
+    return !!bookEntity;
+  }
 }
 
 export default BooksService;

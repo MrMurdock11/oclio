@@ -42,6 +42,13 @@ const booksApi = createApi({
       }),
       invalidatesTags: ["books"],
     }),
+    checkBookAccess: builder.query<{ hasAccess: boolean }, { uid: string }>({
+      query: ({ uid }) => ({
+        url: `/books/${uid}/access`,
+        method: "GET",
+      }),
+      providesTags: ["books"],
+    }),
   }),
 });
 
@@ -50,6 +57,7 @@ export const {
   useUpdateDescriptionMutation,
   useCreateBookMutation,
   useGetBookQuery,
+  useCheckBookAccessQuery,
 } = booksApi;
 
 export default booksApi;

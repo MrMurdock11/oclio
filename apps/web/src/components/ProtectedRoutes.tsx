@@ -1,4 +1,4 @@
-import React from "react";
+import React, { FC } from "react";
 import { Navigate, Outlet, To } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -9,7 +9,7 @@ interface ProtectedRouteProps {
   children?: React.ReactNode;
 }
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+const ProtectedRoute: FC<ProtectedRouteProps> = ({
   redirectPath = "/sign-in",
   children,
 }) => {
@@ -19,7 +19,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to={redirectPath} replace />;
   }
 
-  return children ? children : <Outlet />;
+  return children ?? <Outlet />;
 };
 
 export default ProtectedRoute;

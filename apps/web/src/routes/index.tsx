@@ -1,4 +1,5 @@
 import ProtectedRoute from "@/components/ProtectedRoutes";
+import StudioProtectedRoute from "@/components/StudioProtectedRoute";
 import Home from "@/pages/Home";
 import Studio from "@/pages/studio/Studio";
 import { lazy } from "react";
@@ -13,12 +14,13 @@ const routes = createBrowserRouter([
     children: [{ path: "/profile", element: <p>Profile</p> }],
   },
   {
-    element: <ProtectedRoute redirectPath="/sign-in" />,
+    element: <StudioProtectedRoute />,
     children: [{ path: "/studio/books/:uid", element: <Studio /> }],
   },
   { path: "/", element: <Home /> },
   { path: "/sign-in", element: <SignIn /> },
   { path: "/sign-up", element: <SignUp /> },
+  { path: "/403", element: <p>403</p> },
   { path: "*", element: <p>There's nothing here: 404!</p> },
 ]);
 
