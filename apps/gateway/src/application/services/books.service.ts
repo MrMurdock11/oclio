@@ -47,17 +47,51 @@ class BooksService {
     return book.toBasic();
   }
 
-  async updateTitle(uid: string, title: string): Promise<void> {
+  async updateTitle(
+    userUid: string,
+    uid: string,
+    title: string,
+  ): Promise<void> {
+    const bookEntity = await this._prismaService.book.findUnique({
+      where: { uid, authorUid: userUid },
+      include: { author: true },
+    });
+
+    if (!bookEntity) {
+      throw new NotFoundException('Book not found');
+    }
+
+    const book = Book.fromPlain(bookEntity, User.fromPlain(bookEntity.author));
+
+    book.updateTitle(title);
+
     await this._prismaService.book.update({
       where: { uid },
-      data: { title },
+      data: { title: book.title },
     });
   }
 
-  async updateDescription(uid: string, description: string): Promise<void> {
+  async updateDescription(
+    userUid: string,
+    uid: string,
+    description: string,
+  ): Promise<void> {
+    const bookEntity = await this._prismaService.book.findUnique({
+      where: { uid, authorUid: userUid },
+      include: { author: true },
+    });
+
+    if (!bookEntity) {
+      throw new NotFoundException('Book not found');
+    }
+
+    const book = Book.fromPlain(bookEntity, User.fromPlain(bookEntity.author));
+
+    book.updateDescription(description);
+
     await this._prismaService.book.update({
       where: { uid },
-      data: { description },
+      data: { description: book.description },
     });
   }
 }

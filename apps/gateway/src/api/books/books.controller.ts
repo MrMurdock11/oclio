@@ -34,19 +34,25 @@ class BooksController {
   @Put(':uid/title')
   @HttpCode(HttpStatus.OK)
   async updateTitle(
+    @CurrentUser() user: UserBasic,
     @Param('uid') uid: string,
     @Body() body: { title: string },
   ): Promise<void> {
-    return this._booksService.updateTitle(uid, body.title);
+    return this._booksService.updateTitle(user.uid, uid, body.title);
   }
 
   @Put(':uid/description')
   @HttpCode(HttpStatus.OK)
   async updateDescription(
+    @CurrentUser() user: UserBasic,
     @Param('uid') uid: string,
     @Body() body: { description: string },
   ): Promise<void> {
-    return this._booksService.updateDescription(uid, body.description);
+    return this._booksService.updateDescription(
+      user.uid,
+      uid,
+      body.description,
+    );
   }
 }
 

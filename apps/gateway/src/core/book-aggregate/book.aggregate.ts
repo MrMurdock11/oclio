@@ -39,6 +39,22 @@ class Book extends AggregateRoot<bigint> {
     this._updatedAt = updatedAt;
   }
 
+  get title() {
+    return this._title;
+  }
+
+  get description() {
+    return this._description;
+  }
+
+  updateTitle(title: string) {
+    this._title = title;
+  }
+
+  updateDescription(description: string) {
+    this._description = description;
+  }
+
   static create(user: User, title: string, description: string) {
     const book = new Book(
       null,
