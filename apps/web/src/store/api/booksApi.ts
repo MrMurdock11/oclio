@@ -9,6 +9,13 @@ const booksApi = createApi({
   }),
   tagTypes: ["books"],
   endpoints: (builder) => ({
+    getBooks: builder.query<Book[], void>({
+      query: () => ({
+        url: `/books`,
+        method: "GET",
+      }),
+      providesTags: ["books"],
+    }),
     getBook: builder.query<Book, { uid: string }>({
       query: ({ uid }) => ({
         url: `/books/${uid}`,
@@ -58,6 +65,7 @@ export const {
   useCreateBookMutation,
   useGetBookQuery,
   useCheckBookAccessQuery,
+  useGetBooksQuery,
 } = booksApi;
 
 export default booksApi;

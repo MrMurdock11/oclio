@@ -25,6 +25,12 @@ class BooksController {
     return this._booksService.createBook(user.uid);
   }
 
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  async getBooks(@CurrentUser() user: UserBasic): Promise<BookBasic[]> {
+    return this._booksService.getBooks(user.uid);
+  }
+
   @Get(':uid')
   @HttpCode(HttpStatus.OK)
   async getBook(@Param('uid') uid: string): Promise<BookBasic> {

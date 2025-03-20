@@ -1,6 +1,7 @@
 import ProtectedRoute from "@/components/ProtectedRoutes";
 import StudioProtectedRoute from "@/components/StudioProtectedRoute";
 import Home from "@/pages/Home";
+import Library from "@/pages/Library";
 import Studio from "@/pages/studio/Studio";
 import { lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
@@ -18,6 +19,7 @@ const routes = createBrowserRouter([
     children: [{ path: "/studio/books/:uid", element: <Studio /> }],
   },
   { path: "/", element: <Home /> },
+  { path: "/library", element: <Library /> },
   { path: "/sign-in", element: <SignIn /> },
   { path: "/sign-up", element: <SignUp /> },
   { path: "/403", element: <p>403</p> },

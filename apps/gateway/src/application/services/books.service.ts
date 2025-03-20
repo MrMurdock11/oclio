@@ -32,6 +32,19 @@ class BooksService {
     return { uid: bookEntity.uid };
   }
 
+  async getBooks(userUid: string): Promise<BookBasic[]> {
+    const booksEntity = await this._prismaService.book.findMany({
+      where: { authorUid: userUid },
+      include: { author: true },
+    });
+
+    const books = booksEntity.map((book) =>
+      Book.fromPlain(book, User.fromPlain(book.author)),
+    );
+
+    return books.map((book) => book.toBasic());
+  }
+
   async getBook(uid: string): Promise<BookBasic> {
     const bookEntity = await this._prismaService.book.findUnique({
       where: { uid },

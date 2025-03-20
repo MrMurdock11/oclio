@@ -8,7 +8,7 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
 } from "@/components/ui/Sidebar";
-import { House } from "lucide-react";
+import { BookOpenText, House } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const navItems = [
@@ -16,6 +16,11 @@ const navItems = [
     title: "Home",
     icon: House,
     href: "/",
+  },
+  {
+    title: "Library",
+    icon: BookOpenText,
+    href: "/library",
   },
 ];
 
