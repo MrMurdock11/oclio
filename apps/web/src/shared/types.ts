@@ -1,3 +1,7 @@
+export type UserPreferences = {
+  theme: "light" | "dark" | "system";
+};
+
 export type User = {
   uid: string;
   email: string;
@@ -6,6 +10,9 @@ export type User = {
   preferences: UserPreferences;
 };
 
-export type UserPreferences = {
-  theme: "light" | "dark" | "system";
+export type Book = {
+  uid: string;
+  title: string;
+  description: string;
+  author: User;
 };

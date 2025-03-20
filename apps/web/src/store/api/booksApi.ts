@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { Book } from "@/shared/types";
 
 const booksApi = createApi({
   reducerPath: "booksApi",
@@ -8,6 +9,32 @@ const booksApi = createApi({
   }),
   tagTypes: ["books"],
   endpoints: (builder) => ({
+    getBook: builder.query<Book, { uid: string }>({
+      query: ({ uid }) => ({
+        url: `/books/${uid}`,
+        method: "GET",
+      }),
+      providesTags: ["books"],
+    }),
+    updateTitle: builder.mutation<void, { uid: string; title: string }>({
+      query: ({ uid, title }) => ({
+        url: `/books/${uid}/title`,
+        method: "PUT",
+        body: { title },
+      }),
+      invalidatesTags: ["books"],
+    }),
+    updateDescription: builder.mutation<
+      void,
+      { uid: string; description: string }
+    >({
+      query: ({ uid, description }) => ({
+        url: `/books/${uid}/description`,
+        method: "PUT",
+        body: { description },
+      }),
+      invalidatesTags: ["books"],
+    }),
     createBook: builder.mutation<{ uid: string }, void>({
       query: () => ({
         url: `/books/new`,
@@ -18,6 +45,11 @@ const booksApi = createApi({
   }),
 });
 
-export const { useCreateBookMutation } = booksApi;
+export const {
+  useUpdateTitleMutation,
+  useUpdateDescriptionMutation,
+  useCreateBookMutation,
+  useGetBookQuery,
+} = booksApi;
 
 export default booksApi;

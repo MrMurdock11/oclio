@@ -14,7 +14,7 @@ const routes = createBrowserRouter([
   },
   {
     element: <ProtectedRoute redirectPath="/sign-in" />,
-    children: [{ path: "/studio/books/:bookId", element: <Studio /> }],
+    children: [{ path: "/studio/books/:uid", element: <Studio /> }],
   },
   { path: "/", element: <Home /> },
   { path: "/sign-in", element: <SignIn /> },

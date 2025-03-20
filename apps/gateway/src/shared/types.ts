@@ -1,13 +1,18 @@
+export type UserPreferences = {
+  theme: 'light' | 'dark' | 'system';
+};
+
 export type UserBasic = {
   uid: string;
   email: string;
   username: string;
   fullName: string;
-  preferences: {
-    theme: 'light' | 'dark';
-  };
+  preferences: UserPreferences;
 };
 
-export type UserPreferences = {
-  theme: 'light' | 'dark';
+export type BookBasic = {
+  uid: string;
+  title: string;
+  description: string;
+  author: UserBasic;
 };

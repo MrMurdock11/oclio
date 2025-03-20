@@ -1,4 +1,5 @@
 import { AggregateRoot } from '@common/primitives/aggregate-root';
+import { BookBasic } from '@gateway/shared/types';
 import { Book as PrismaBook } from '@prisma/client';
 import { Expose, Transform } from 'class-transformer';
 
@@ -72,6 +73,15 @@ class Book extends AggregateRoot<bigint> {
       createdAt: this._createdAt,
       updatedAt: this._updatedAt,
       authorUid: this._author.uid,
+    };
+  }
+
+  toBasic(): BookBasic {
+    return {
+      uid: this._uid,
+      title: this._title,
+      description: this._description,
+      author: this._author.toBasic(),
     };
   }
 }

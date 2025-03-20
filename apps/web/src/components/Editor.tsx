@@ -6,9 +6,10 @@ const extensions = [StarterKit];
 type EditorProps = {
   content?: string;
   className?: string;
+  onUpdate?: (content: string) => void;
 };
 
-const Editor = ({ content = "", className = "" }: EditorProps) => {
+const Editor = ({ content = "", className = "", onUpdate }: EditorProps) => {
   const editor = useEditor({
     extensions,
     content,
@@ -16,6 +17,9 @@ const Editor = ({ content = "", className = "" }: EditorProps) => {
       attributes: {
         class: "outline-none",
       },
+    },
+    onUpdate: ({ editor }) => {
+      onUpdate?.(editor.getText());
     },
   });
 

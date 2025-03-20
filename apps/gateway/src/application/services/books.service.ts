@@ -3,13 +3,13 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import Book from '@gateway/core/book-aggregate/book.aggregate';
 import { User } from '@gateway/core/user-aggregate/user.aggregate';
 import { PrismaService } from '@gateway/persistence/prisma/prisma.service';
+import { BookBasic } from '@gateway/shared/types';
 
 @Injectable()
 class BooksService {
   constructor(private readonly _prismaService: PrismaService) {}
 
   async createBook(userUid: string): Promise<{ uid: string }> {
-    console.log('getting user by uid', userUid);
     const userEntity = await this._prismaService.user.findUnique({
       where: { uid: userUid },
     });
@@ -19,10 +19,8 @@ class BooksService {
       throw new NotFoundException('User not found');
     }
 
-    console.log('creating book');
     const book = Book.create(user, 'An Untitled Novel', 'A description');
 
-    console.log('creating book entity');
     const { authorUid, id, uid, ...bookData } = book.toPlain();
     const bookEntity = await this._prismaService.book.create({
       data: {
@@ -31,8 +29,36 @@ class BooksService {
       },
     });
 
-    console.log('book created', bookEntity.uid);
     return { uid: bookEntity.uid };
+  }
+
+  async getBook(uid: string): Promise<BookBasic> {
+    const bookEntity = await this._prismaService.book.findUnique({
+      where: { uid },
+      include: { author: true },
+    });
+
+    if (!bookEntity) {
+      throw new NotFoundException('Book not found');
+    }
+
+    const book = Book.fromPlain(bookEntity, User.fromPlain(bookEntity.author));
+
+    return book.toBasic();
+  }
+
+  async updateTitle(uid: string, title: string): Promise<void> {
+    await this._prismaService.book.update({
+      where: { uid },
+      data: { title },
+    });
+  }
+
+  async updateDescription(uid: string, description: string): Promise<void> {
+    await this._prismaService.book.update({
+      where: { uid },
+      data: { description },
+    });
   }
 }
 
